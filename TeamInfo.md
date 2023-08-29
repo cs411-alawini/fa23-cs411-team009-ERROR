@@ -1,28 +1,27 @@
-# team000-sample
+# team009-ERROR
 
 ## Basic Information
 
 |   Info      |        Description     |
 | ----------- | ---------------------- |
-| TeamID      |        Team-000        |
-| TeamName    |         sample         |
-| Captain     |       Abdu Alawini     |
-| Captain     |  alawini@illinois.edu  |
-| Member1     |        Kevin Pei       |
-| Member1     |   kevin2@illinois.edu  |
-| Member2     |    Bharati Kulkarni    |
-| Member2     |  bharati1@illinois.edu |
-| Member3     |                        |
-| Member3     |                        |
+| TeamID      |        Team-009        |
+| TeamName    |         ERROR         |
+| Captain     |       Rishabh Adiga     |
+| Captain     |  radiga2@illinois.edu |
+| Member1     |        Tanay Dixit      |
+| Member1     |   tanayd2@illinois.edu  |
+| Member2     |        Lahari Anne
+| Member2     |  lanne2@illinois.edu |
+| Member3     |  Sanjay Raj Aerra               |
+| Member3     |   saerra2@illinois.edu  |
 
 ## Project Information
 
 |   Info      |        Description     |
 | ----------- | ---------------------- |
-|  Title      |       ProjectTitle     |
-| System URL  |      link_to_system    |
-| Video Link  |      link_to_video     |
+|  Title      |            |
+| System URL  |          |
+| Video Link  |           |
 
 ## Project Summary
 
-This is a summary of the project!
