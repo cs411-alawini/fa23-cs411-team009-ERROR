@@ -23,7 +23,7 @@ Furthermore, our platform will try to offer a unique bridge between the public a
 Machine learning-based predictions are another distinctive feature of our platform. By leveraging regression algorithms, we can provide forecasts and risk assessments based on historical crime data. This time-based analysis enables users to make informed decisions about their activities, helping them avoid potentially risky situations, especially during odd hours.
 There are similar websites such as www.crimemapping.com but our website will be different as we will aim to provide features for reporting crimes, special access for the police department and ML based prediction for future crime occurrences.
 
-REALNESS
+## REALNESS
 
 ## FUNCTIONALITY
 Our application consists of a comprehensive and extensive set of features built for user safety, reliability, and intuitive flow.
@@ -45,8 +45,18 @@ Our application consists of a comprehensive and extensive set of features built 
   Database administrators will have admin access so that they can interact with the database and logs directly.
 
 
-UI MOCK UP
+
+## UI MOCK UP
 
 <img width="584" alt="Screenshot 2023-09-11 at 1 08 54 AM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/7b9daaf9-c1d1-4884-8e7f-6c687282c729">
 
-PROJECT WORK DISTRIBUTION
+
+## PROJECT WORK DISTRIBUTION
+
+|   Member      |        Responsibilities     |
+| ----------- | ---------------------- |
+|  Lahari Anne      |       Perform Entity-Relationship (ER) modeling for Crime Data.<br> Implement the User Interface (UI) for crime data management.<br> Develop and deploy stored procedures for efficient data retrieval. <br>Normalize the database schema for optimal data organization. <br>Implement input data validation mechanisms to ensure data integrity. <br>Visualize crime statistics using appropriate tools.     |
+| Rishabh Adiga	| Design a robust database schema for User Reports. <br>Develop a machine learning-based regressor for predictive analysis. <br>Convert the ER model to a Relational Model for efficient data storage. <br>Implement access controls for police data retrieval. <br>Visualize statistics for user reports using data visualization techniques.|
+|Sanjay 	| Design a database schema for Alert management. <br>Implement the User Interface (UI) for alert configuration and monitoring. <br>Enforce relational model constraints and triggers for data integrity. <br> Configure and implement alerting mechanisms. <br> Facilitate the onboarding and deployment process on Google Cloud Platform (GCP). |
+| Pranav Pillai	| Design the database schema for User and Police login. <br> Implement the User Report feature within the database system. <br>Perform database indexing to optimize query performance. <br> Implement robust security measures for login and web applications. <br> Ensure a secure onboarding and deployment process on Google Cloud Platform (GCP) |
+
