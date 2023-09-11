@@ -25,7 +25,25 @@ There are similar websites such as www.crimemapping.com but our website will be 
 
 REALNESS
 
-FUNCTIONALITY
+## FUNCTIONALITY
+Our application consists of a comprehensive and extensive set of features built for user safety, reliability, and intuitive flow.
+1.	**User Interface for Crime Stats.**
+    A user-friendly interface to allow users to view crime statistics and logs in LA. They can log in anonymously or can use their Google account to sign in.
+2.	**Advanced Filtering Options.**
+   Users can filter for aggregations of crimes using options like geography, severity of crime, number of people injured/killed, etc.
+3.	**Interactive LA Map Visualization.**
+    Users can access an interactive map to drag around and click to learn more about nearby crimes in detail. This map will show crime density but can be zoomed in to change the granularity.
+4.	**User Crime Reporting Portal.**
+   Users can add any crimes they witness to the website. There will be backend validation to make sure that the crimes are not falsely reported and have accurate and useful details. User-reported data will be flagged differently than police-reported data to reinforce user trust. If several users alert the same crime in the same area, it won’t duplicate the log but will update a “reported count”.
+5.	**Police Department Access.**
+   Law enforcement officials will be able to log in with their official credentials to view more in-depth information and directly view raw and unprocessed data. This is different than the user interface, because law enforcement officials will have a greater level of access to analytics, real-time reporting, etc.
+6.	**Safety Notifications.**
+   Users can turn on safety notifications that will notify them if a crime is reported near them. We will use some staggered levels of importance; for example, a severe crime within 5 miles should cause an alert, but petty theft would only be alerted to users within a 1-mile radius. This feature will require users to input their address. It will display through a notification banner on their screen.
+7.	**Crime Prediction using Machine Learning.**
+   Based on the number of crimes that occur in a certain area, we will fit a machine learning model on the data to predict crimes that occur within the next day/week/month. For example, if the data indicates that crime is higher during the weekend, this will be reflected in the predictions.
+8.	**Admin Access for DBAs.**
+  Database administrators will have admin access so that they can interact with the database and logs directly.
+
 
 UI MOCK UP
 
