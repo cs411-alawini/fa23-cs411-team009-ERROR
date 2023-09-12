@@ -25,6 +25,8 @@ There are similar websites such as www.crimemapping.com but our website will be 
 
 ## REALNESS
 
+The data utilized in this project originates from the "Crime in Los Angeles Data from 2020 to Present" dataset, accessible on the Kaggle platform. This dataset contains information such as timestamps and geographical coordinates of the incident, crime classifications, as well as crime and modus operandi (MO) codes. Notably, this dataset is an authentic representation of real-world crime data, sourced directly from the Los Angeles Police Department. However, the dataset's documentation acknowledges the potential presence of inaccuracies. This is attributed to the data's origin, which involves the manual transcription of reports initially documented on paper. The website also includes a functionality that enables users to report crimes, with the data being incorporated into the database only after it undergoes a validation process by the police department. Moreover, we are also using additional datasets to provide more information on our website. These include geographical data, as well as crime codes and modus operandi codes, obtained from external sources.
+
 ## FUNCTIONALITY
 Our application consists of a comprehensive and extensive set of features built for user safety, reliability, and intuitive flow.
 1.	**User Interface for Crime Stats.**
