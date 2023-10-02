@@ -3,7 +3,8 @@
 # UML Diagram
 **The UML diagram for the database for CrimeStats is as below:**
 
-![CS 411 Pt1 UML](https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/cb223870-b428-40dc-ab01-44df553a9e83)
+![CS 411 Pt1 UML_Final](https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/07f4fd84-5b7e-4bc6-a896-975ab3ded825)
+
 
 
 # Assumptions
