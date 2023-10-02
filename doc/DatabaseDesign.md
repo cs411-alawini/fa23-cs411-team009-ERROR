@@ -16,6 +16,17 @@
 6) Each crime can be verified by one or more users (Police with dedicated access control).
 7) Users can sign up to the portal with a unique email and username. User name is used as primary key and a unique constraint is used to ensure a unique email address is used.
 
+# Description and Cardinality of Relationships
+
+1. CrimeType - Relationship maps CrimeReports to CrimeCodes. Each crime report can have 1 CrmCd, each CrmCd can be associated with 0 or more DR_NO (Crime Reports).<br>
+2. CrimeLocation - Relationship maps CrimeReports to AreaMapping. Each crime report can have 1 Area, each Area can be associated with 0 or more DR_NO (Crime Reports).<br>
+3. Status - Relationship maps CrimeReports to Status. Each crime report can have 1 Status, each Status can be associated with 0 or more DR_NO (Crime Reports).<br>
+4. CrimePremis - Relationship maps CrimeReports to PremisCodes. Each crime report can have 1 Premis_Cd, each Premis_Cd can be associated with 0 or more DR_NO (Crime Reports).<br>
+5. CrimeWeapon - Relationship maps CrimeReports to WeaponsUsed. Each crime report can have 0 or 1 Weapon_Used_cd, each Weapon_Used_cd can be associated with 0 or more DR_NO (Crime Reports).<br>
+6. CrimeMO - Relationship maps CrimeReports to MOCodes. Each crime report can have 0 or more MOCode, each MOCode can be associated with 0 or more DR_NO (Crime Reports).<br>
+7. CrimeReporting - Relationship maps CrimeReports to UserLogin. Each crime report can have 0 or 1 username (reporter), each username can be associated with 0 or more DR_NO (Crime Reports).<br>
+8. CrimeVerification - Relationship maps CrimeReports to UserLogin. Each crime report can have 0 or more username (verifiers), each username can be associated with 0 or more DR_NO (Crime Reports).<br>
+
 # Normalisation Process
 
 ## For the Original Dataset:
@@ -55,6 +66,9 @@ V(Status, Status_Desc)<br>
 W(Premis_Cd, Premis_Desc)<br>
 Y(DR_NO, MoCodes)<br>
 X(MoCodes, MoDesc)<br>
+
+## BCNF vs 3NF
+Each of the relations satisfies both BCNF and 3NF normalisation forms. In order to preserve the functional dependency DR_NO --> MOCodes, with attribute MOCodes having multple accepted values in the original relation, we chose 3NF. This choice is made as BCNF does not guarantee functional dependency preservation, where as 3NF does.
 
 # Relational Schema
 
@@ -137,5 +151,16 @@ DRNO : varchar(50) [PK],
 VerifiedBy : varchar(50) [PK],
 Verification_Time : timestamp
 )
+
+
+# Corrections from Stage 1
+Feedback : Include Delete operation<br>
+Usecases where Delete will be used :
+1. User deactivation - When users choose to delete their accounts
+2. Police can delete false reports - While verifying crime reports, police can choose to delete false reports.
+
+
+
+
 
 
