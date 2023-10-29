@@ -90,9 +90,10 @@ Premis_Cd : int  [FK to PremisCodes.Premis_Cd],
 Weapon_Used_cd : int  [FK to WeaponsUsed.Weapon_Used_Cd],
 Status : varchar(10) [FK to CrimeStatus.Status],
 Location : varchar(100),
-Lat : real,
-Lon : real,
-Verified : varchar(25)
+Latitude : real,
+Longitude : real,
+Verified : varchar(25),
+Reported_By : varchar(50)
 )
  
 2)**AreaMapping**(
@@ -121,7 +122,7 @@ StatusDesc : varchar(50)
 )
  
 7)**MOCodes**(
-MOCode : varchar(10) [PK],
+MOCode : int [PK],
 MODesc : varchar(50)
 )
 
@@ -132,8 +133,8 @@ Password : varchar(50),
 Address : varchar(100),
 Phone : varchar(25),
 Email : varchar(50) NOT NULL UNIQUE,
-Lat : real,
-Long : real,
+Latitude : real,
+Longitude : real,
 ReceiveAlerts : varchar(25),
 AlertRadius : int,
 TypeOfAlert : varchar(50)
@@ -148,7 +149,7 @@ MOcode : varchar(50) [PK]
 )
  
 2)**CrimeVerification** (
-DRNO : varchar(50) [PK],
+DR_NO : varchar(50) [PK],
 VerifiedBy : varchar(50) [PK],
 Verification_Time : timestamp
 )
