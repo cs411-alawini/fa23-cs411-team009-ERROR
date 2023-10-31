@@ -116,6 +116,7 @@ CREATE TABLE `CrimeMOMapping` (<br>
 
 # ADVANCED SQL QUERIES
 
+**Query1**
 **Query Description:**
 <br>Find number of crimes that occurred in ‘Central’ or ‘Southeast’ Area of LA, which did not involve ‘REVOLVER’ or ‘GLASS’ weapons, which occurred on ‘STREET’ or ‘DRIVEWAY’ or ‘FREEWAY’ Premises,. The crimes should not involve ‘BURGLARY’ or ‘ROBBERY’.<br>
 
@@ -129,7 +130,16 @@ CREATE TABLE `CrimeMOMapping` (<br>
 
 <img width="1434" alt="Screenshot 2023-10-31 at 2 01 39 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/cd6481f8-2702-483a-a52d-d28b0ddd281d">
 
+**Query2**
 
+**Query Description**
+<br>Common Weapons used in the top 5 Crimes occurred in Los Angeles as per the Crime Reports.<br>
+
+**Query**
+<br>SELECT DISTINCT Weapon_Desc, CrimeCodes.Crm_Cd_Desc FROM CrimeReports NATURAL JOIN WeaponsUsed NATURAL JOIN CrimeCodes WHERE CrimeCodes.CrmCd in  (SELECT CrmCd FROM (SELECT COUNT(DR_NO) as CrimeCount, CrmCd from CrimeReports GROUP BY CrmCd ORDER BY CrimeCount Desc LIMIT 5) as temp);<br>
+
+**Query Results**<br>
+<img width="1413" alt="Screenshot 2023-10-31 at 5 31 10 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/ed2f4d2a-ea59-4a59-ab2b-dfb49fee3f37">
 
 
 # Corrections from Stage 2
