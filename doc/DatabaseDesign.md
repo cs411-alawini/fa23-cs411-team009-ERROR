@@ -116,31 +116,31 @@ CREATE TABLE `CrimeMOMapping` (<br>
 
 # ADVANCED SQL QUERIES
 
-**Query1**
-**Query Description:**
-<br>Find number of crimes that occurred in ‘Central’ or ‘Southeast’ Area of LA, which did not involve ‘REVOLVER’ or ‘GLASS’ weapons, which occurred on ‘STREET’ or ‘DRIVEWAY’ or ‘FREEWAY’ Premises,. The crimes should not involve ‘BURGLARY’ or ‘ROBBERY’.<br>
+**Query1 : Using Subqueries, Join ,SET Operators and Group By Function**<br>
 
-**Query**
-<br>SELECT COUNT(DR_NO),AreaName from CrimeReports NATURAL JOIN AreaMapping NATURAL JOIN PremisCodes NATURAL JOIN CrimeCodes NATURAL JOIN WeaponsUsed WHERE (AreaName ='Central'or AreaName = 'Southeast') AND (Premis_Desc IN ('STREET','DRIVEWAY','FREEWAY')) AND (Crm_Cd_Desc != 'ROBBEREY' or Crm_Cd_Desc != 'BURGLARY') AND (Weapon_Desc != 'REVOLVER' AND Weapon_Desc != 'SEMI-AUTOMATIC PISTOL')  GROUP BY AreaName;<br>
+**Query Description**<br>
+<br>To find top 5 safe and unsafe areas based on number of crimes reported in each of these areas.<br>
 
-**Query Results**<br>
-<img width="1420" alt="Screenshot 2023-10-31 at 1 58 53 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/d3f31489-5b5b-499d-84fb-1fbff4e708b5">
-
-<br> Since we are using an aggregation query, results are less than 15 rows. To show the data level result, we used the below query sample<br>
-
-<img width="1434" alt="Screenshot 2023-10-31 at 2 01 39 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/cd6481f8-2702-483a-a52d-d28b0ddd281d">
-
-**Query2**
-
-**Query Description**
-<br>Common Weapons used in the top 5 Crimes occurred in Los Angeles as per the Crime Reports.<br>
-
-**Query**
-<br>SELECT DISTINCT Weapon_Desc, CrimeCodes.Crm_Cd_Desc FROM CrimeReports NATURAL JOIN WeaponsUsed NATURAL JOIN CrimeCodes WHERE CrimeCodes.CrmCd in  (SELECT CrmCd FROM (SELECT COUNT(DR_NO) as CrimeCount, CrmCd from CrimeReports GROUP BY CrmCd ORDER BY CrimeCount Desc LIMIT 5) as temp);<br>
+**Query**<br>
+<br>SELECT DISTINCT AreaName, 'Most_Common' as 'Frequency_of_Crime' FROM CrimeReports NATURAL JOIN AreaMapping WHERE CrimeReports.Area in  (SELECT Area FROM (SELECT COUNT(DR_NO) as CrimeCount, Area from CrimeReports GROUP BY Area ORDER BY CrimeCount Desc LIMIT 5) as temp)
+UNION<br>
+SELECT DISTINCT AreaName, 'Least_Common' as 'Frequency_of_Crime' FROM CrimeReports NATURAL JOIN AreaMapping WHERE CrimeReports.Area in  (SELECT Area FROM (SELECT COUNT(DR_NO) as CrimeCount, Area from CrimeReports GROUP BY Area ORDER BY CrimeCount  LIMIT 5) as temp);<br>
 
 **Query Results**<br>
-<img width="1413" alt="Screenshot 2023-10-31 at 5 31 10 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/ed2f4d2a-ea59-4a59-ab2b-dfb49fee3f37">
+<img width="1428" alt="Screenshot 2023-10-31 at 6 09 06 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/8660dd4a-aa97-458e-9d15-55d313adca53">
 
+The Query output is less than 15 rows as we are looking for only top 5 safe and unsafe areas in Los Angeles. So the output is always expected to be 10.
+
+**Query2 : Using Joins and Group By Function**<br>
+**Query Description:** <br>
+<br>Find number of crimes in each Area which did not involve ‘REVOLVER’ or ‘GLASS’ weapons, which occurred on ‘STREET’ or ‘DRIVEWAY’ or ‘FREEWAY’ Premises. The crimes should not involve ‘BURGLARY’ or ‘ROBBERY’.<br>
+
+**Query**
+<br>SELECT Count(DR_NO),AreaName FROM CrimeReports NATURAL JOIN AreaMapping NATURAL JOIN WeaponsUsed NATURAL JOIN PremisCodes NATURAL JOIN CrimeCodes NATURAL JOIN CrimeStatus <br> 
+WHERE (Weapon_Desc != 'REVOLVER' AND Weapon_Desc != 'SEMI-AUTOMATIC PISTOL') AND Premis_Desc IN ('STREET','DRIVEWAY','FREEWAY') AND (Crm_Cd_Desc != 'ROBBEREY' OR Crm_Cd_Desc != 'BURGLARY') GROUP BY AreaName;<br>
+
+**Query Results**<br>
+<br><img width="1426" alt="Screenshot 2023-10-31 at 5 52 36 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/5620813e-ab89-4c9a-ac9c-c18230151c3f"><br>
 
 # Corrections from Stage 2
 
