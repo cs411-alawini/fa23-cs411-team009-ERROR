@@ -252,4 +252,4 @@ Hence, not normalizing further.<br><br>
    
 
 **3) The translated CrimeVerification table should have [FK] indicators for both attributes.**<br>
-   CrimeVerification ( DRNO : varchar(50) [PK] [FK to CrimeReports.DRNo], VerifiedBy : varchar(50) [PK] [FK to UserLogin.UserName], Verification_Time : timestamp)
+   CrimeVerification ( DRNO : varchar(50) [PK] [FK to CrimeReports.DRNo], VerifiedBy : varchar(50) [PK] [FK to UserLogin.UserName], Verification_Time : datetime)
