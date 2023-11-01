@@ -119,15 +119,15 @@ CREATE TABLE `CrimeMOMapping` (<br>
 **Query1 : Using Subqueries, Join ,SET Operators and Group By Function**<br>
 
 **Query Description**<br>
-<br>To find top 5 safe and unsafe areas based on number of crimes reported in each of these areas.<br>
+<br>To find top 5 safe and unsafe areas based on number of crimes occurred after 2021 in each of these areas.<br>
 
 **Query**<br>
-<br>SELECT DISTINCT AreaName, 'Most_Common' as 'Frequency_of_Crime' FROM CrimeReports NATURAL JOIN AreaMapping WHERE CrimeReports.Area in  (SELECT Area FROM (SELECT COUNT(DR_NO) as CrimeCount, Area from CrimeReports GROUP BY Area ORDER BY CrimeCount Desc LIMIT 5) as temp)
-UNION<br>
-SELECT DISTINCT AreaName, 'Least_Common' as 'Frequency_of_Crime' FROM CrimeReports NATURAL JOIN AreaMapping WHERE CrimeReports.Area in  (SELECT Area FROM (SELECT COUNT(DR_NO) as CrimeCount, Area from CrimeReports GROUP BY Area ORDER BY CrimeCount  LIMIT 5) as temp);<br>
+<br>SELECT DISTINCT AreaName, 'Most_Common' as 'Frequency_of_Crime' FROM CrimeReports NATURAL JOIN AreaMapping WHERE CrimeReports.Area in  (SELECT Area FROM (SELECT COUNT(DR_NO) as CrimeCount, Area from CrimeReports WHERE Date_Occ > '2021-01-01' GROUP BY Area ORDER BY CrimeCount Desc LIMIT 5) as temp) 
+UNION
+SELECT DISTINCT AreaName, 'Least_Common' as 'Frequency_of_Crime' FROM CrimeReports NATURAL JOIN AreaMapping WHERE CrimeReports.Area in  (SELECT Area FROM (SELECT COUNT(DR_NO) as CrimeCount, Area from CrimeReports WHERE Date_Occ > '2021-01-01' GROUP BY Area ORDER BY CrimeCount  LIMIT 5) as temp);<br>
 
 **Query Results**<br>
-<img width="1428" alt="Screenshot 2023-10-31 at 6 09 06 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/8660dd4a-aa97-458e-9d15-55d313adca53">
+<img width="1419" alt="Screenshot 2023-10-31 at 6 39 02 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/2ac89798-f9ef-444f-9467-d2a1c707f517"><br>
 
 The Query output is less than 15 rows as we are looking for only top 5 safe and unsafe areas in Los Angeles. So the output is always expected to be 10.
 
@@ -141,6 +141,49 @@ WHERE (Weapon_Desc != 'REVOLVER' AND Weapon_Desc != 'SEMI-AUTOMATIC PISTOL') AND
 
 **Query Results**<br>
 <br><img width="1426" alt="Screenshot 2023-10-31 at 5 52 36 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/5620813e-ab89-4c9a-ac9c-c18230151c3f"><br>
+
+# INDEXING
+
+**Default Index on Main Relation CrimeReports**
+<br>The below default indices are created automatically on all Primary and Foreign Keys.<br>
+
+<img width="1426" alt="Screenshot 2023-10-31 at 6 35 27 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/482ad391-6e8d-4bd3-b0e4-562aa7132e9c"> <br>
+
+## Performance of Query 1
+**Performance of 1st Query without additional indexing**<br>
+<br> Query Execution took 0.93 seconds without additional indexing.
+<img width="1429" alt="Screenshot 2023-10-31 at 6 54 39 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/c6d9ec81-314a-47ee-b45c-f2e1b38622eb"> <br>
+
+<img width="1427" alt="Screenshot 2023-10-31 at 6 41 05 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/74c130eb-3796-4d18-9a9a-ddad4da03c24"><br>
+
+**Index Trial 1: Creating index on AreaName in AreaMapping relation**
+
+<img width="1238" alt="Screenshot 2023-10-31 at 6 42 35 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/56554b25-02f1-43e0-b267-329816909e6e"><br>
+
+**Query Performance after adding this index : 0.88 seconds <br>**
+
+<img width="1431" alt="Screenshot 2023-10-31 at 6 53 12 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/1c68c6b8-a237-42d6-9da0-0992204065c6"> <br>
+
+<img width="1424" alt="Screenshot 2023-10-31 at 6 43 51 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/8da4e70b-4092-4387-97d0-14c416bea001"> <br>
+
+**Index Trial 2: Creating index on Date_Occ in CrimeReports relation after dropping previous added Index**
+<img width="1498" alt="Screenshot 2023-10-31 at 6 47 04 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/6d2f95df-c373-4944-8296-91f350d14fd1"> <br>
+
+**Query Performance after adding this index : 0.89 seconds <br>**
+<img width="1426" alt="Screenshot 2023-10-31 at 6 52 19 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/3b369104-edfc-4369-9137-6c9d646bbe45"><br>
+
+<img width="1428" alt="Screenshot 2023-10-31 at 6 46 52 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/67a04712-818c-419d-a04f-c41b2398c8c1"> <br>
+
+**Index Trial 3: Using both the indices - Date_Occ in CrimeReports relation and AreaName on AreaMapping**<br>
+
+
+**Query Performance after adding this index :  0.87 seconds <br>**
+
+<img width="1434" alt="Screenshot 2023-10-31 at 6 49 38 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/1ef49565-a416-403e-acfe-51c9690e4e17"> <br>
+
+<img width="1428" alt="Screenshot 2023-10-31 at 6 49 11 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/43bc1dd9-c24f-43fd-b335-defb51a9fd79"> <br>
+
+
 
 # Corrections from Stage 2
 
