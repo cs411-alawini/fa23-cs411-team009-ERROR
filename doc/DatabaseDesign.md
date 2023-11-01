@@ -149,10 +149,10 @@ Find number of crimes in each Area which did not involve ‘REVOLVER’ or ‘GL
 
 **Query**
 <br>SELECT Count(DR_NO),AreaName FROM CrimeReports NATURAL JOIN AreaMapping NATURAL JOIN WeaponsUsed NATURAL JOIN PremisCodes NATURAL JOIN CrimeCodes NATURAL JOIN CrimeStatus <br> 
-WHERE (Weapon_Desc != 'REVOLVER' AND Weapon_Desc != 'SEMI-AUTOMATIC PISTOL') AND Premis_Desc IN ('STREET','DRIVEWAY','FREEWAY') AND (Crm_Cd_Desc != 'ROBBEREY' OR Crm_Cd_Desc != 'BURGLARY') GROUP BY AreaName;<br>
+WHERE (Weapon_Desc != 'REVOLVER' AND Weapon_Desc != 'SEMI-AUTOMATIC PISTOL') AND Premis_Desc IN ('STREET','DRIVEWAY','FREEWAY') AND (Crm_Cd_Desc != 'ROBBERY' AND Crm_Cd_Desc != 'BURGLARY') GROUP BY AreaName LIMIT 15;<br>
 
 **Query Results**<br>
-<br><img width="1426" alt="Screenshot 2023-10-31 at 5 52 36 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/5620813e-ab89-4c9a-ac9c-c18230151c3f"><br>
+<br>![image](https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/70105902/c2159c73-7923-4e09-9901-149e91ce674e)<br>
 
 ## INDEXING
 
