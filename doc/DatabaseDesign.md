@@ -183,7 +183,36 @@ WHERE (Weapon_Desc != 'REVOLVER' AND Weapon_Desc != 'SEMI-AUTOMATIC PISTOL') AND
 
 <img width="1428" alt="Screenshot 2023-10-31 at 6 49 11 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/43bc1dd9-c24f-43fd-b335-defb51a9fd79"> <br>
 
+## Performance of Query 2
+**Performance of 1st Query without additional indexing**<br>
+<br> Query Execution took 0.36 seconds without additional indexing.
+ <br>
+ 
+![Screenshot 2023-10-31 192309](https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/70105902/abd54927-0ebb-4b7e-b51b-bbc364527e42)<br>
 
+
+**Index Trial 1: Creating index on AreaName in AreaMapping relation**
+
+![Screenshot 2023-10-31 193041](https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/70105902/61e8e07c-2710-41d6-9328-6504d6148aef) <br>
+
+**Query Performance after adding this index : 0.29 seconds <br>**
+
+![Screenshot 2023-10-31 193409](https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/70105902/24fab886-e1e5-426c-9426-71a20852b3d4) <br>
+
+**Index Trial 2: Creating index on Weapon_Desc in WeaponsUsed relation after dropping previous added Index**
+
+![Screenshot 2023-10-31 194344](https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/70105902/c01c032a-6a66-4234-b9db-14e3250c0db9)<br>
+
+**Query Performance after adding this index : 0.25 seconds <br>**
+
+![Screenshot 2023-10-31 195242](https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/70105902/00ea1248-c2c5-45a5-949b-4193562240d9)<br>
+
+**Index Trial 3: Using both the indices - Weapon_Desc in WeaponsUsed relation and AreaName on AreaMapping**<br>
+
+
+**Query Performance after adding this index :  0.24 seconds <br>**
+
+ ![Screenshot 2023-10-31 195629](https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/70105902/da86915a-281a-40c1-b056-2833b92454f5)<br>
 
 # Corrections from Stage 2
 
