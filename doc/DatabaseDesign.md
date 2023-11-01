@@ -119,15 +119,18 @@ CREATE TABLE `CrimeMOMapping` (<br>
 **Query1 : Using Subqueries, Join ,SET Operators and Group By Function**<br>
 
 **Query Description**<br>
-<br>To find top 5 safe and unsafe areas based on number of crimes occurred after 2021 in each of these areas.<br>
+<br>To find top 5 safe and unsafe areas for women above 18 years of age based on number of crimes occurred after 2021 in each of these areas.<br>
 
 **Query**<br>
-<br>SELECT DISTINCT AreaName, 'Most_Common' as 'Frequency_of_Crime' FROM CrimeReports NATURAL JOIN AreaMapping WHERE CrimeReports.Area in  (SELECT Area FROM (SELECT COUNT(DR_NO) as CrimeCount, Area from CrimeReports WHERE Date_Occ > '2021-01-01' GROUP BY Area ORDER BY CrimeCount Desc LIMIT 5) as temp) 
-UNION
-SELECT DISTINCT AreaName, 'Least_Common' as 'Frequency_of_Crime' FROM CrimeReports NATURAL JOIN AreaMapping WHERE CrimeReports.Area in  (SELECT Area FROM (SELECT COUNT(DR_NO) as CrimeCount, Area from CrimeReports WHERE Date_Occ > '2021-01-01' GROUP BY Area ORDER BY CrimeCount  LIMIT 5) as temp);<br>
+<br>
+SELECT DISTINCT AreaName, 'Most_Common' as 'Frequency_of_Crime' FROM CrimeReports NATURAL JOIN AreaMapping WHERE CrimeReports.Area in (SELECT Area FROM (SELECT COUNT(DR_NO) as CrimeCount, Area from CrimeReports WHERE Date_Occ > '2021-01-01'and Vict_age >= 18 and Vict_sex = 'F' GROUP BY Area ORDER BY CrimeCount Desc LIMIT 5) as temp)
+<br>UNION<br>
+SELECT DISTINCT AreaName, 'Least_Common' as 'Frequency_of_Crime' FROM CrimeReports NATURAL JOIN AreaMapping WHERE CrimeReports.Area in (SELECT Area FROM (SELECT COUNT(DR_NO) as CrimeCount, Area from CrimeReports WHERE Date_Occ > '2021-01-01' and Vict_age >= 18 and Vict_sex = 'F' GROUP BY Area ORDER BY CrimeCount LIMIT 5) as temp)
+<br>
 
 **Query Results**<br>
-<img width="1419" alt="Screenshot 2023-10-31 at 6 39 02 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/2ac89798-f9ef-444f-9467-d2a1c707f517"><br>
+<img width="1505" alt="query_output" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/143364981/b8cb44a4-4bee-4b98-beaf-69a015697576">
+<br>
 
 The Query output is less than 15 rows as we are looking for only top 5 safe and unsafe areas in Los Angeles. So the output is always expected to be 10.
 
@@ -151,32 +154,31 @@ WHERE (Weapon_Desc != 'REVOLVER' AND Weapon_Desc != 'SEMI-AUTOMATIC PISTOL') AND
 
 ## Performance of Query 1
 **Performance of 1st Query without additional indexing**<br>
-<br> Query Execution took 0.93 seconds without additional indexing.
-<img width="1429" alt="Screenshot 2023-10-31 at 6 54 39 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/c6d9ec81-314a-47ee-b45c-f2e1b38622eb"> <br>
+<br> Query Execution took 1.06 seconds without additional indexing.
+<img width="1512" alt="Without_idx" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/143364981/150a63be-3ca7-4f86-9e43-27ab4b417839"><br>
 
-<img width="1427" alt="Screenshot 2023-10-31 at 6 41 05 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/74c130eb-3796-4d18-9a9a-ddad4da03c24"><br>
+<img width="1512" alt="without_idx_time" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/143364981/e2e24bc0-a3da-4249-a83e-aa03e4051b7a"><br>
 
-**Index Trial 1: Creating index on AreaName in AreaMapping relation**
+**Index Trial 1: Creating index on Vict_age in CrimeReports relation**
 
-<img width="1238" alt="Screenshot 2023-10-31 at 6 42 35 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/56554b25-02f1-43e0-b267-329816909e6e"><br>
+<img width="1512" alt="vict_age" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/143364981/2ad0ef9f-519c-44db-8b6e-a914f8c39e22"><br>
 
-**Query Performance after adding this index : 0.88 seconds <br>**
+**Query Performance after adding this index : 1.01 seconds <br>**
 
-<img width="1431" alt="Screenshot 2023-10-31 at 6 53 12 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/1c68c6b8-a237-42d6-9da0-0992204065c6"> <br>
+<img width="1512" alt="with_age_idx" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/143364981/d76e52e5-552e-4560-bfa4-65dcb54c85b3"><br>
 
-<img width="1424" alt="Screenshot 2023-10-31 at 6 43 51 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/8da4e70b-4092-4387-97d0-14c416bea001"> <br>
+<img width="1512" alt="with_age_idx_time" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/143364981/106fedf3-1a8e-4166-adfa-92e7a5ba3fe3"><br>
 
-**Index Trial 2: Creating index on Date_Occ in CrimeReports relation after dropping previous added Index**
-<img width="1498" alt="Screenshot 2023-10-31 at 6 47 04 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/6d2f95df-c373-4944-8296-91f350d14fd1"> <br>
+**Index Trial 2: Creating index on Vict_Sex in CrimeReports relation after dropping previous added Index**
+<img width="1512" alt="vict_sex" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/143364981/d5e1a73c-138f-4506-84b0-43a6bb3ee16f"><br>
 
-**Query Performance after adding this index : 0.89 seconds <br>**
-<img width="1426" alt="Screenshot 2023-10-31 at 6 52 19 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/3b369104-edfc-4369-9137-6c9d646bbe45"><br>
+**Query Performance after adding this index : 0.78 seconds <br>**
+<img width="1512" alt="with_sex_idx" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/143364981/175e1d29-d8e8-48eb-9b20-2da744086396"><br>
 
-<img width="1428" alt="Screenshot 2023-10-31 at 6 46 52 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/67a04712-818c-419d-a04f-c41b2398c8c1"> <br>
+<img width="1512" alt="with_sex_idx_time" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/143364981/3e5d7f12-1a2f-484c-971b-ebe4dd792547"><br>
 
 **Index Trial 3: Using both the indices - Date_Occ in CrimeReports relation and AreaName on AreaMapping**<br>
-
-
+<img width="1512" alt="date_and_area" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/143364981/72f5bac0-1da9-40e0-9938-16c42a06a43c"><br>
 **Query Performance after adding this index :  0.87 seconds <br>**
 
 <img width="1434" alt="Screenshot 2023-10-31 at 6 49 38 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/1ef49565-a416-403e-acfe-51c9690e4e17"> <br>
@@ -184,7 +186,7 @@ WHERE (Weapon_Desc != 'REVOLVER' AND Weapon_Desc != 'SEMI-AUTOMATIC PISTOL') AND
 <img width="1428" alt="Screenshot 2023-10-31 at 6 49 11 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/43bc1dd9-c24f-43fd-b335-defb51a9fd79"> <br>
 
 ## Performance of Query 2
-**Performance of 1st Query without additional indexing**<br>
+**Performance of 2nd Query without additional indexing**<br>
 <br> Query Execution took 0.36 seconds without additional indexing.
  <br>
  
