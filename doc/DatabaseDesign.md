@@ -1,6 +1,6 @@
 # DATABASE IMPLEMENTATION
 
-# DATABASE CONNECTION
+## DATABASE CONNECTION
 <br>
 Database Name : cs411-pt1-db<br>
 Platform : GCP <br>
@@ -10,7 +10,7 @@ Database connection : <br>
 <img width="1439" alt="Screenshot 2023-11-01 at 2 04 34 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/afec3226-5985-443a-be57-20df5c643e3d">
 
 
-# DATA DEFINITION LANGUAGE COMMANDS
+## DATA DEFINITION LANGUAGE COMMANDS
 
 **Relation : CrimeCodes**<br>
 
@@ -103,7 +103,7 @@ CREATE TABLE `CrimeReports` (<br>
 CREATE TABLE `CrimeVerification` (<br>
   `DR_NO` int NOT NULL,<br>
   `VerifiedBy` varchar(100) NOT NULL,<br>
-  `Verification_Time` time,<br>
+  `Verification_Time` datetime,<br>
   PRIMARY KEY (`DR_NO`,`VerifiedBy`),<br>
   CONSTRAINT `CrimeVerification_ibfk_1` FOREIGN KEY (`DR_NO`) REFERENCES `CrimeReports` (`DR_NO`),<br>
   CONSTRAINT `CrimeVerification_ibfk_2` FOREIGN KEY (`VerifiedBy`) REFERENCES `UserLogin` (`Username`)<br>
@@ -124,15 +124,14 @@ CREATE TABLE `CrimeMOMapping` (<br>
 <img width="408" alt="Screenshot 2023-10-31 at 2 11 58 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/66f57e84-a669-4b15-b2e4-2f15feb34524">
 
 
-# ADVANCED SQL QUERIES
+## ADVANCED SQL QUERIES
 
 **Query1 : Using Subqueries, Join ,SET Operators and Group By Function**<br>
 
 **Query Description**<br>
-<br>To find top 5 safe and unsafe areas for women above 18 years of age based on number of crimes occurred after 2021 in each of these areas.<br>
+To find top 5 safe and unsafe areas for women above 18 years of age based on number of crimes occurred after 2021 in each of these areas.<br>
 
 **Query**<br>
-<br>
 SELECT DISTINCT AreaName, 'Most_Common' as 'Frequency_of_Crime' FROM CrimeReports NATURAL JOIN AreaMapping WHERE CrimeReports.Area in (SELECT Area FROM (SELECT COUNT(DR_NO) as CrimeCount, Area from CrimeReports WHERE Date_Occ > '2021-01-01'and Vict_age >= 18 and Vict_sex = 'F' GROUP BY Area ORDER BY CrimeCount Desc LIMIT 5) as temp)
 <br>UNION<br>
 SELECT DISTINCT AreaName, 'Least_Common' as 'Frequency_of_Crime' FROM CrimeReports NATURAL JOIN AreaMapping WHERE CrimeReports.Area in (SELECT Area FROM (SELECT COUNT(DR_NO) as CrimeCount, Area from CrimeReports WHERE Date_Occ > '2021-01-01' and Vict_age >= 18 and Vict_sex = 'F' GROUP BY Area ORDER BY CrimeCount LIMIT 5) as temp)
@@ -146,7 +145,7 @@ The Query output is less than 15 rows as we are looking for only top 5 safe and 
 
 **Query2 : Using Joins and Group By Function**<br>
 **Query Description:** <br>
-<br>Find number of crimes in each Area which did not involve ‘REVOLVER’ or ‘GLASS’ weapons, which occurred on ‘STREET’ or ‘DRIVEWAY’ or ‘FREEWAY’ Premises. The crimes should not involve ‘BURGLARY’ or ‘ROBBERY’.<br>
+Find number of crimes in each Area which did not involve ‘REVOLVER’ or ‘GLASS’ weapons, which occurred on ‘STREET’ or ‘DRIVEWAY’ or ‘FREEWAY’ Premises. The crimes should not involve ‘BURGLARY’ or ‘ROBBERY’.<br>
 
 **Query**
 <br>SELECT Count(DR_NO),AreaName FROM CrimeReports NATURAL JOIN AreaMapping NATURAL JOIN WeaponsUsed NATURAL JOIN PremisCodes NATURAL JOIN CrimeCodes NATURAL JOIN CrimeStatus <br> 
@@ -155,14 +154,14 @@ WHERE (Weapon_Desc != 'REVOLVER' AND Weapon_Desc != 'SEMI-AUTOMATIC PISTOL') AND
 **Query Results**<br>
 <br><img width="1426" alt="Screenshot 2023-10-31 at 5 52 36 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/5620813e-ab89-4c9a-ac9c-c18230151c3f"><br>
 
-# INDEXING
+## INDEXING
 
 **Default Index on Main Relation CrimeReports**
 <br>The below default indices are created automatically on all Primary and Foreign Keys.<br>
 
 <img width="1426" alt="Screenshot 2023-10-31 at 6 35 27 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/482ad391-6e8d-4bd3-b0e4-562aa7132e9c"> <br>
 
-## PERFORMANCE OF QUERY 1
+### PERFORMANCE OF QUERY 1
 **Performance of 1st Query without additional indexing**<br>
 <br> Query Execution took 1.06 seconds without additional indexing.
 <img width="1512" alt="Without_idx" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/143364981/150a63be-3ca7-4f86-9e43-27ab4b417839"><br>
@@ -195,17 +194,17 @@ WHERE (Weapon_Desc != 'REVOLVER' AND Weapon_Desc != 'SEMI-AUTOMATIC PISTOL') AND
 
 <img width="1428" alt="Screenshot 2023-10-31 at 6 49 11 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/43bc1dd9-c24f-43fd-b335-defb51a9fd79"> <br>
 
-## ANALYSIS OF INDEXING ON QUERY 1:
-<br> Index on Vict_Age : The query performance was not improved with this index as Forgeign key and Primary key indices are playing major role in table scanning for this query. Time reduced from 1.08 seconds to 1.01 seconds, which is not significant. Cost based comparisons show that with indexing and without indexing, the cost remained the same.<br>
-<br> Index on Vict_Sex : The query performance improved with index on Vict_Sex. We can see this in terms of time reduction - from 1.08 secs to 0.78 secs. Cost on table scan reduced from 36661.85 to 5457.08. Hence, this index helps improve query performance.<br>
-<br> Indexing on Date_Occ and AreaName : Using indexing on Date_Occ and AreaName fields as we have a where condition on Date_Occ and we are grouping by AreaName, we see that there is no significant query performance improvement. Though time reduced from 1.08 secs to 0.87 secs, the cost for table scan on 'union temporary' reduced only from 63.66 to 61.10. The cost for one of the nested loop inner join reduced from 538 to 434 and cost for table scan remain the same - 36661.85. This indexing helps improve the query only slightly, when comapred to the index on Vict_Sex.<br>
+### ANALYSIS OF INDEXING ON QUERY 1:
+<br> **Index on Vict_Age** : The query performance was not improved with this index as Forgeign key and Primary key indices are playing major role in table scanning for this query. Time reduced from 1.08 seconds to 1.01 seconds, which is not significant. Cost based comparisons show that with indexing and without indexing, the cost remained the same.<br>
+<br> **Index on Vict_Sex** : The query performance improved with index on Vict_Sex. We can see this in terms of time reduction - from 1.08 secs to 0.78 secs. Cost on table scan reduced from 36661.85 to 5457.08. Hence, this index helps improve query performance.<br>
+<br> **Indexing on Date_Occ and AreaName** : Using indexing on Date_Occ and AreaName fields as we have a where condition on Date_Occ and we are grouping by AreaName, we see that there is no significant query performance improvement. Though time reduced from 1.08 secs to 0.87 secs, the cost for table scan on 'union temporary' reduced only from 63.66 to 61.10. The cost for one of the nested loop inner join reduced from 538 to 434 and cost for table scan remain the same - 36661.85. This indexing helps improve the query only slightly, when comapred to the index on Vict_Sex.<br>
 
 <img width="273" alt="image" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/3e064055-7d3e-4f2a-b120-955396cee2e5">
 <img width="259" alt="image" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/aa94fcc7-64df-4d54-89a5-678d5270de8b">
 
 
 
-## PERFORMANCE OF QUERY 2
+### PERFORMANCE OF QUERY 2
 **Performance of 2nd Query without additional indexing**<br>
 <br> Query Execution took 0.36 seconds without additional indexing.
  <br>
@@ -234,17 +233,17 @@ WHERE (Weapon_Desc != 'REVOLVER' AND Weapon_Desc != 'SEMI-AUTOMATIC PISTOL') AND
 
 <img width="1512" alt="Screenshot 2023-11-01 at 1 48 36 AM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/143364981/29bbc7f1-d25d-409d-bfde-a9d345957ccf"><br>
 
-## ANALYSIS OF INDEXING ON QUERY 2:
-<br> Index on AreaName : The query performance was not improved with this index as Forgeign key and Primary key indices are playing major role in table scanning for this query. Time reduced from 0.36 seconds to 0.29 seconds, which is not significant as different iterations give different runtimes. Cost based comparisons show that with indexing and without indexing, the cost remained the same.<br>
-<br> Index on Weapon_Desc : The query performance was not improved with index on Weapon_Used. Though the time reduced from 0.36 to 0.25 seconds, we cannot rely on it as iterations can have different runtimes each time we run the query. Comparing cost, we can see that cost increased from 160395 to 165464 for the scan on nested loop inner join.<br>
-<br> Indexing on Premis_Desc : There is a significant improvement for Premis_Desc index in terms of cost. Time reduced from 0.36 seconds to 0.25 seconds. The cost reduced from 160395 to 5424 for the nested loop inner join scan. Similar reduction in cost can be seen for all nested loop inner join scans. Hence, this index help improve the query performance in terms of cost.<br>
+### ANALYSIS OF INDEXING ON QUERY 2:
+<br> **Index on AreaName** : The query performance was not improved with this index as Forgeign key and Primary key indices are playing major role in table scanning for this query. Time reduced from 0.36 seconds to 0.29 seconds, which is not significant as different iterations give different runtimes. Cost based comparisons show that with indexing and without indexing, the cost remained the same.<br>
+<br> **Index on Weapon_Desc** : The query performance was not improved with index on Weapon_Used. Though the time reduced from 0.36 to 0.25 seconds, we cannot rely on it as iterations can have different runtimes each time we run the query. Comparing cost, we can see that cost increased from 160395 to 165464 for the scan on nested loop inner join.<br>
+<br> **Indexing on Premis_Desc** : There is a significant improvement for Premis_Desc index in terms of cost. Time reduced from 0.36 seconds to 0.25 seconds. The cost reduced from 160395 to 5424 for the nested loop inner join scan. Similar reduction in cost can be seen for all nested loop inner join scans. Hence, this index help improve the query performance in terms of cost.<br>
 
 <img width="282" alt="image" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/c3738042-0cc3-4ac7-a686-51fc73083338">
 <img width="296" alt="image" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/f321f9dc-2b71-438e-8da8-167d56b5cca1">
 
 
 
-# Corrections from Stage 2
+## Corrections from Stage 2
 
 Feedback :<br><br>
 **1) In the assumptions, you have "Each crime can be verified by one or more users," but in the UML, it is 0..* on the User side.**<br>
