@@ -3,8 +3,7 @@
 # UML Diagram
 **The UML diagram for the database for CrimeStats is as below:**
 
-![CS 411 Pt1 UML_Final](https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/07f4fd84-5b7e-4bc6-a896-975ab3ded825)
-
+![image](https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/cbbc3d6a-90e2-4348-b967-80084d94e319)
 
 
 # Assumptions
@@ -37,8 +36,11 @@
 R(DR_NO, Date_Rptd, Date_Occ, Time_Occ, Rpt_Dist_No, Vict_Age , Vict_Sex, Vict_Descent, Location, Latitude, Longitude, Area, Area_Name, Crm_Cd, Crm_Cd_Desc, Weapon_Used_Cd, Weapon_Desc, Status, Status_Desc, Premis_Cd, Premis_Desc)<br>
 Y(DR_NO, MoCodes)<br>
 X(MoCodes, MoDesc)<br>
+Z(Username, AccessControl, Password, Address, Phone, Email, Lat, Long, ReceiveAlerts, AlertRadius, TypeOfAlert)<br>
 
-(Note: The Mocodes attribute in the original dataset did not have atomic values, so to make it atomic, we created new relations X(MoCodes, MoDesc) and Y(DR_NO, MoCodes) to satisfy 1NF)
+(Note: The Mocodes attribute in the original dataset did not have atomic values, so to make it atomic, we created new relations X(MoCodes, MoDesc) and Y(DR_NO, MoCodes) to satisfy 1NF
+UserLogin table has Primary Key Username which determines all the other attributes, hence satisfying 3NF and BCNF. There are no other FDs in this relation.
+)
 
 **Functional Dependencies for the relation R:**
 
@@ -76,10 +78,10 @@ Each of the relations satisfies both BCNF and 3NF normalisation forms. In order 
 **The relational Schema for the database is as follows:**
 
 1)**CrimeReports**(
-DR_NO : varchar(50) [PK],
+DR_NO : int [PK],
 Date_Rptd : date,
 Date_Occ : date,
-Time_Occ : time,
+Time_Occ : int,
 Area : int [FK to AreaMapping.Area],
 Rpt_Dist_No : int,
 Crm_Cd : varchar(20)  [FK to CrimeCodes.CrmCd],
@@ -149,11 +151,10 @@ MOcode : varchar(50) [PK]
 )
  
 2)**CrimeVerification** (
-DR_NO : varchar(50) [PK],
-VerifiedBy : varchar(50) [PK],
-Verification_Time : timestamp
+DR_NO : varchar(50) [PK] [FK to CrimeReports.DRNo],
+VerifiedBy : varchar(50) [PK] [FK to UserLogin.UserName],
+Verification_Time : datetime
 )
-
 
 # Corrections from Stage 1
 Feedback : Include Delete operation<br>
