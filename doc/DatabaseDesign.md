@@ -1,5 +1,15 @@
 # DATABASE IMPLEMENTATION
 
+# DATABASE CONNECTION
+<br>
+Database Name : cs411-pt1-db<br>
+Platform : GCP <br>
+Database connection : <br>
+<img width="1440" alt="Screenshot 2023-11-01 at 2 03 24 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/37294a74-754d-4400-9b51-16ea47166ab8"> <br>
+
+<img width="1439" alt="Screenshot 2023-11-01 at 2 04 34 PM" src="https://github.com/cs411-alawini/fa23-cs411-team009-ERROR/assets/30744984/afec3226-5985-443a-be57-20df5c643e3d">
+
+
 # DATA DEFINITION LANGUAGE COMMANDS
 
 **Relation : CrimeCodes**<br>
