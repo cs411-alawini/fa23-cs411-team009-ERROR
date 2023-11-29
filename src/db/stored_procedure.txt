@@ -1,0 +1,50 @@
+delimiter //
+
+create procedure f()
+begin
+
+declare done int default 0;
+declare hometeam int default 0;
+declare awayteam int default 0;
+declare capacity int default 0;
+declare overall1 int default 0;
+declare overall2 int default 0;
+declare win int(11) default 0;
+declare id int default 0;
+
+declare matchcur cursor for(select t1.teamID, t2.teamID, arCapacity from (select teamID, arName, arCapacity from Teams natural join Arenas where arCapacity >= 18000) as t1, Teams as t2 where t1.teamID <= 10 and t2.teamID <= 10);
+
+declare continue handler for not found set done = 1;
+
+drop table if exists matchresults;
+create table matchresults (
+    match_id int,
+    team1 int,
+    team2 int,
+    winner int
+);
+
+open matchcur;
+repeat
+    fetch matchcur into hometeam, awayteam, capacity;
+    select avg(overall) from ( select pID, overall, teamID from Players where teamID = hometeam order by overall desc limit 5) as foo group by teamID into overall1;
+    select avg(overall) from ( select pID, overall, teamID from Players where teamID = awayteam order by overall desc limit 5) as foo group by teamID into overall2;
+    if overall1 + capacity / 18000 > overall2 then
+        select hometeam into win;
+    else
+        select awayteam into win;
+    end if;
+    select id+1 into id;
+    insert into matchresults values(id, hometeam, awayteam, win);
+until done
+end repeat;
+close matchcur;
+
+select tmp.teamID as team_id, tmp.teamName as team_name, count(*) as cnt from (select teamID, teamName, winner from matchresults, Teams where matchresults.winner = Teams.teamID) as tmp group by tmp.winner order by cnt desc;
+
+select * from matchresults;
+
+end;
+
+//
+delimiter ;

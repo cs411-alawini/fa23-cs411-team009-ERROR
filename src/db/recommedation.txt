@@ -1,0 +1,84 @@
+delimiter //
+
+create procedure cf()
+begin
+declare insideavg int default 0;
+declare outsideavg int default 0;
+declare athleticismavg int default 0;
+declare playMakingavg int default 0;
+declare reboundingavg int default 0;
+declare defendingavg int default 0;
+declare lowestavg int default 9999;
+
+drop table if exists recommendationresult;
+create table recommendationresult (
+    pID int (11) PRIMARY KEY,
+  pAttr varchar (765),
+  teamID int (11) REFERENCES Teams(teamID) on delete
+  set
+    null,
+    pName varchar (765),
+    pPos varchar (765),
+    pHeight int (11),
+    pWeight int (11),
+    overall int (11),
+    insideScore int (11),
+    outsideScore int (11),
+    athleticism int (11),
+    playMaking int (11),
+    rebounding int (11),
+    defending int (11)
+);
+
+select avg(insideScore) from ( select insideScore from Players natural join UserTeams where uID = 1 order by insideScore desc limit 5) as foo1 into insideavg;
+select avg(outsideScore) from ( select outsideScore from Players natural join UserTeams where uID = 1 order by outsideScore desc limit 5) as foo2 into outsideavg;
+select avg(athleticism) from ( select athleticism from Players natural join UserTeams where uID = 1 order by athleticism desc limit 5) as foo3 into athleticismavg;
+select avg(playMaking) from ( select playMaking from Players natural join UserTeams where uID = 1 order by playMaking desc limit 5) as foo4 into playMakingavg;
+select avg(rebounding) from ( select rebounding from Players natural join UserTeams where uID = 1 order by rebounding desc limit 5) as foo5 into reboundingavg;
+select avg(defending) from ( select defending from Players natural join UserTeams where uID = 1 order by defending desc limit 5) as foo6 into defendingavg;
+
+if lowestavg>insideavg then 
+    set lowestavg = insideavg;
+end if;
+if lowestavg>outsideavg then 
+    set lowestavg = outsideavg;
+end if;
+if lowestavg>athleticismavg then 
+    set lowestavg = athleticismavg;
+end if;
+if lowestavg>playMakingavg then 
+    set lowestavg = playMakingavg;
+end if;
+if lowestavg>reboundingavg then 
+    set lowestavg = reboundingavg;
+end if;
+if lowestavg>defendingavg then 
+    set lowestavg = defendingavg;
+end if;
+
+if lowestavg=insideavg then 
+    insert into recommendationresult
+    select * from Players where Players.pID not in (select pID from UserTeams where uID = 1) order by insideScore DESC limit 5;
+elseif lowestavg=outsideavg then 
+    insert into recommendationresult
+    select * from Players where Players.pID not in (select pID from UserTeams where uID = 1) order by outsideScore DESC limit 5;
+elseif lowestavg=athleticismavg then 
+    insert into recommendationresult
+    select * from Players where Players.pID not in (select pID from UserTeams where uID = 1) order by athleticism DESC limit 5;
+elseif lowestavg=playMakingavg then 
+    insert into recommendationresult
+    select * from Players where Players.pID not in (select pID from UserTeams where uID = 1) order by playMaking DESC limit 5;
+elseif lowestavg=reboundingavg then 
+    insert into recommendationresult
+    select * from Players where Players.pID not in (select pID from UserTeams where uID = 1) order by rebounding DESC limit 5;
+elseif lowestavg=defendingavg then 
+    insert into recommendationresult
+    select * from Players where Players.pID not in (select pID from UserTeams where uID = 1) order by defending DESC limit 5;
+end if;
+
+select * from recommendationresult;
+
+end;
+
+//
+delimiter ;

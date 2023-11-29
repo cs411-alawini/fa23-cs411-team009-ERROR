@@ -1,0 +1,384 @@
+.App {
+  text-align: center;
+
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.form input{
+  width: 300px;
+  height: 60px;
+  margin: 10px;
+  font-size: 25px;
+}
+
+.card{
+  display: flex;
+  flex-direction: row;
+  justify-items: start;
+  width: 99%;
+  height: 80px;
+  border: 2px solid grey;
+  border-radius: 15px;
+  margin: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.card p{
+  display: flex;
+  flex-direction: column;
+  justify-items: start;
+  font-size: 16px;
+  width: 150px;
+  text-align: center;
+}
+
+.card input{
+  display: flex;
+  flex-direction: column;
+  justify-items: start;
+  font-size: 16px;
+  width: 150px;
+  text-align: center;
+  color: rgb(250, 250, 250);
+}
+
+.card input::placeholder {
+  color: rgb(250, 250, 250);
+}
+
+.card button{
+  color: #837e92;
+}
+
+.card1{
+  display: flex;
+  flex-direction: row;
+  justify-items: start;
+  width: 99%;
+  height: 95px;
+  border: 2px solid grey;
+  border-radius: 15px;
+  margin: 10px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.card1 p{
+  display: flex;
+  flex-direction: column;
+  justify-items: start;
+  font-size: 16px;
+  width: 150px;
+  text-align: center;
+}
+
+.card1 input{
+  display: flex;
+  flex-direction: column;
+  justify-items: start;
+  font-size: 16px;
+  width: 150px;
+  text-align: center;
+  color: rgb(250, 250, 250);
+}
+
+.card1 input::placeholder {
+  color: rgb(250, 250, 250);
+}
+
+.card1 button{
+  color: #837e92;
+}
+
+.player_update input{
+  width: 50px;
+}
+
+.player-input{
+  align-items: center;
+  justify-content: center;
+}
+
+#updateInput{
+  width: 100px;
+  height: 20px;
+  margin-bottom: 10px;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Montserrat', sans-serif;
+  background-color: #05111b;
+  color: rgb(250, 250, 250);
+}
+
+.coin-app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 64px;
+  color: #fff;
+}
+
+.player-search {
+  margin-bottom: 64px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  text-align: center;
+}
+
+
+.player_update {
+  justify-content: center;
+  align-content: center;
+  text-align: center;
+}
+
+
+.coin-text {
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.player-input {
+  padding-left: 16px;
+  width: 300px;
+  height: 50px;
+  border-radius: 4px;
+  border: none;
+  background-image: linear-gradient(
+    -225deg,
+    #ac32e4 0%,
+    #544368 48%,
+    #4801ff 100%
+  );
+
+  color: #e2e2e2;
+}
+
+.coin-input::placeholder {
+  color: #e2e2e2;
+}
+
+/* New Addition for Stage 5 */
+
+.col-sm-6{
+  display: flex;
+  flex-direction: row;
+  justify-items: start;
+  width: 99%;
+  height: 95px;
+  /* border: 2px solid grey; */
+  border-radius: 15px;
+  margin: 10px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  /* fill: #fff; */
+}
+
+/* Modal styles */
+.modal .modal-dialog {
+	max-width: 400px;
+}
+.modal .modal-header, .modal .modal-body, .modal .modal-footer {
+	padding: 20px 30px;
+  background: #423aa5;
+}
+.modal .modal-content {
+	border-radius: 3px;
+	font-size: 14px;
+}
+.modal .modal-footer {
+	background: #423aa5;
+	border-radius: 0 0 3px 3px;
+}
+.modal .modal-title {
+	display: inline-block;
+  background: #423aa5;
+}
+.modal .form-control {
+	border-radius: 2px;
+	box-shadow: none;
+	border-color: #dddddd;
+}
+.modal textarea.form-control {
+	resize: vertical;
+}
+.modal .btn {
+	border-radius: 2px;
+	min-width: 338px;
+  background: #13627a;
+}	
+.modal form label {
+	font-weight: normal;
+}	
+
+/* .modal button.close {
+	color: rgb(255, 255, 255);
+}	 */
+
+.btn-act {
+	padding: 4px;
+  background: #000000;
+}
+
+/* .span[material-icons] svg{
+  color: #fff;
+  fill:#fff;
+} */
+
+
+/* Stage 4 */
+/*
+.App {
+  text-align: center;
+
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.form input{
+  width: 300px;
+  height: 60px;
+  margin: 10px;
+  font-size: 25px;
+}
+
+.card{
+  display: flex;
+  flex-direction: row;
+  justify-items: start;
+  width: 99%;
+  height: 80px;
+  border: 2px solid grey;
+  border-radius: 15px;
+  margin: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.card p{
+  display: flex;
+  flex-direction: column;
+  justify-items: start;
+  font-size: 16px;
+  width: 150px;
+  text-align: center;
+}
+
+.card input{
+  display: flex;
+  flex-direction: column;
+  justify-items: start;
+  font-size: 16px;
+  width: 150px;
+  text-align: center;
+  color: rgb(250, 250, 250);
+}
+
+.card input::placeholder {
+  color: rgb(250, 250, 250);
+}
+
+.card button{
+  color: #837e92;
+}
+
+.player_update input{
+  width: 50px;
+}
+
+.player-input{
+  align-items: center;
+  justify-content: center;
+}
+
+#updateInput{
+  width: 100px;
+  height: 20px;
+  margin-bottom: 10px;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Montserrat', sans-serif;
+  background-color: #05111b;
+  color: rgb(250, 250, 250);
+}
+
+.coin-app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 64px;
+  color: #fff;
+}
+
+.player-search {
+  margin-bottom: 64px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  text-align: center;
+}
+
+
+.player_update {
+  justify-content: center;
+  align-content: center;
+  text-align: center;
+}
+
+
+.coin-text {
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.player-input {
+  padding-left: 16px;
+  width: 300px;
+  height: 50px;
+  border-radius: 4px;
+  border: none;
+  background-image: linear-gradient(
+    -225deg,
+    #ac32e4 0%,
+    #544368 48%,
+    #4801ff 100%
+  );
+
+  color: #e2e2e2;
+}
+
+.coin-input::placeholder {
+  color: #e2e2e2;
+}
+*/
