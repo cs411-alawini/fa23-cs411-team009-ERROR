@@ -26,6 +26,16 @@ app.get("/api/get", (require, response) => {
     });
 });
 
+// Gender count
+app.get("/api/get/gendercount", (require, response) => {
+    const sqlSelect = "SELECT Vict_Sex AS Gender, COUNT(*) AS NumCrimes FROM CrimeReports WHERE Vict_Sex = 'M' OR Vict_Sex = 'F'  GROUP BY Vict_Sex;";
+    db.query(sqlSelect, function (err, result, fields) {
+        console.log(result);
+        response.send(result);
+        if (err) throw err;
+    });
+});
+
 // TODO: Add a new player (pID) to the user (userID) team
 app.put("/api/update/crimereport/", (require, response) => {
     // TODO

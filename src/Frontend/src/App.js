@@ -16,6 +16,7 @@ import Tournament from './pages/Tournament';
 import Login from './pages/login';
 import ForgotPassword from './pages/forgotPassword';
 import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path='/Register' element={<Register/>} />
           <Route path='/forgotPassword' element={<ForgotPassword/>} />
           <Route path='/home' element={<Home/>} />
+          <Route path='/dashboard' element={<Dashboard/>} />
           <Route path='/My_Team' element={<MyTeam/>} />
           <Route path='/Tournament' element={<Tournament/>} />
           <Route path='/Investigator' element={<Investigator/>} />
