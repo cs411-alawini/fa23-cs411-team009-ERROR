@@ -16,11 +16,10 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 
-// DONE: Get 10 crime reports
-app.get("/api/get", (require, response) => {
-    const sqlSelect = "SELECT * FROM CrimeReports limit 10";
+// DONE: Get CrimeReports
+app.get("/api/get", (request, response) => {
+    const sqlSelect = "SELECT * FROM CrimeReports NATURAL JOIN AreaMapping NATURAL JOIN WeaponsUsed NATURAL JOIN PremisCodes NATURAL JOIN CrimeStatus NATURAL JOIN CrimeCodes limit 10";
     db.query(sqlSelect, function (err, result, fields) {
-        console.log(result);
         response.send(result);
         if (err) throw err;
     });
@@ -100,7 +99,45 @@ app.post("/api/insert/crime/:maxDRNO", (require, response) => {
     });
 });
 
+//Api call for search
+app.get("/api/search", (request, response) => {
+    // TODO
+    const { Area, Gender, Weapons, Crimes, Premis, Status } = request.query;
+    let sqlSearch = "SELECT * FROM CrimeReports NATURAL JOIN AreaMapping NATURAL JOIN WeaponsUsed NATURAL JOIN PremisCodes NATURAL JOIN CrimeStatus NATURAL JOIN CrimeCodes WHERE 1=1";
+    const conditions = [];
+    if (Area) sqlSearch += ` AND AreaName = '${Area}' `;
+    if (Gender) sqlSearch += ` AND Vict_Sex = '${Gender}' `;
+    if (Weapons) sqlSearch += ` AND Weapon_Desc = '${Weapons}' `;
+    if (Crimes) sqlSearch += ` AND Crm_Cd_Desc = '${Crimes}' `;
+    if (Premis) sqlSearch += ` AND Premis_Desc = '${Premis}' `;
+    if (Status) sqlSearch += ` AND Status = '${Status}' `;
+    
+    // Join the conditions with 'AND'
+    sqlSearch += ' LIMIT 1000';
+    db.query(sqlSearch, (err, result) => {
+        response.send(result);
+        if (err) throw err;
+    })
+});
 
+app.get("/api/uniqueSearchValues/:field", (request, response) => {
+    const { field } = request.params;
+    const sqlSelect = `SELECT DISTINCT ${field} FROM CrimeReports NATURAL JOIN AreaMapping NATURAL JOIN WeaponsUsed NATURAL JOIN PremisCodes NATURAL JOIN CrimeStatus NATURAL JOIN CrimeCodes`;
+    db.query(sqlSelect, function (err, result, fields) {
+        response.send(result);
+        if (err) throw err;
+    });
+});
+
+// Gender count
+app.get("/api/get/gendercount", (require, response) => {
+    const sqlSelect = "SELECT Vict_Sex AS Gender, COUNT(*) AS NumCrimes FROM CrimeReports WHERE Vict_Sex = 'M' OR Vict_Sex = 'F'  GROUP BY Vict_Sex;";
+    db.query(sqlSelect, function (err, result, fields) {
+        console.log(result);
+        response.send(result);
+        if (err) throw err;
+    });
+});
 
 app.listen(3002, () => {
     console.log("running on port 3002");
