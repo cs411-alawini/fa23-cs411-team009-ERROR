@@ -24,6 +24,18 @@ function App() {
 
   const [crimeReportList, setcrimeReportList] = useState([]);
   const [lineGraphData, setLineGraphData] = useState(null);
+  const [genderCountData, setGenderCountData] = useState([]);
+
+    useEffect(() => {
+      Axios.get(`http://localhost:3002/api/get/gendercount`)
+        .then((response) => {
+          console.log(response.data);
+          setGenderCountData(response.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching gender count:", error);
+        });
+    }, []);
 
   useEffect(() => {
     Axios.get(`http://localhost:3002/api/get/linegraphdata`)
@@ -77,23 +89,29 @@ function App() {
   };
 
   return (
-    <Container fluid>
-    <Row>
-        <Col md="5"></Col>
-        <Col md="2"><h1>CRIMESTATS</h1></Col>
-        <Col md="5"></Col>
-    </Row>
-    <Row>
-        <Col><h3>Alert! Robbery attempted at S Busey Avenue</h3></Col>
-    </Row>
-    <Row>
-        <div className="App">
-        </div>
-    </Row>
+      <Container fluid>
         <Row>
-          <Col lg="3" sm="6">
+            <Col md="5"></Col>
+            <Col md="2"><h1>CRIMESTATS</h1></Col>
+            <Col md="5"></Col>
+        </Row>
+        <Row>
+            <Col><h3>Alert! Robbery attempted at S Busey Avenue</h3></Col>
+        </Row>
+        <Row>
+            <div className="App">
+            </div>
+        </Row>
+        <Row>
+          <Col md="3">
                 <div>
-                    Place holders for tiles
+                <h2 style={styles.heading}>Victims Gender Count</h2>
+                    {genderCountData.map((genderData) => (
+                      <div key={genderData.Gender} style={styles.numberContainer}>
+                        <p style={styles.label}>{genderData.Gender === 'M' ? 'Male' : 'Female'}:</p>
+                        <div style={styles.number}>{genderData.NumCrimes}</div>
+                      </div>
+                    ))}
                 </div>
             </Col>
         </Row>
@@ -119,8 +137,38 @@ function App() {
                 </div>
             </Col>                
         </Row>
-    </Container>
+      </Container>
   );
-}
+};
+
+const styles = {
+  container: {
+    border: '1px solid #ddd',
+    borderRadius: '5px',
+    padding: '15px',
+    width: '250px',
+    margin: '20px',
+    color: 'white',
+    backgroundColor: '#333',
+  },
+  heading: {
+    fontSize: '1.5em',
+    marginBottom: '10px',
+  },
+  numberContainer: {
+    marginBottom: '10px',
+  },
+  label: {
+    marginBottom: '5px',
+    color: '#bbb', // Lighter color for labels
+  },
+  number: {
+    padding: '8px',
+    borderRadius: '3px',
+    backgroundColor: '#555', // Darker background for numbers
+    color: 'white',
+    textAlign: 'center',
+  },
+};
 
 export default App;
