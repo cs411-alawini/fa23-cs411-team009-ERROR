@@ -26,6 +26,16 @@ app.get("/api/get", (require, response) => {
     });
 });
 
+// DONE: Get CrimeCount line graph data
+app.get("/api/get/linegraphdata", (require, response) => {
+    const sqlSelect = "SELECT CONCAT(month,' ',year) as monthyear, crimecount from (SELECT MONTH(Date_Occ) as month ,DATE_FORMAT(Date_Occ,'%Y') as year, COUNT(*) AS crimecount FROM CrimeReports GROUP BY DATE_FORMAT(Date_Occ,'%Y'), MONTH(Date_Occ) ORDER BY DATE_FORMAT(Date_Occ,'%Y'), MONTH(Date_Occ)) as temp;";
+    db.query(sqlSelect, function (err, result, fields) {
+        console.log(result);
+        response.send(result);
+        if (err) throw err;
+    });
+});
+
 // TODO: Add a new player (pID) to the user (userID) team
 app.put("/api/update/crimereport/", (require, response) => {
     // TODO
@@ -90,36 +100,67 @@ app.delete("/api/delete/:pID", (require, response) => {
     })
 });
 
-// TODO: Insert/Update a player's information
-app.post("/api/modify/player", (require, response) => {
-    var pID = require.body.pID;
-    var pAttr = require.body.pAttr;
-    var teamID = require.body.teamID;
-    var pName = require.body.pName;
-    var pPos = require.body.pPos;
-    var pHeight = require.body.pHeight;
-    var pWeight = require.body.pWeight;
-    var overall = require.body.overall;
-    var insideScore = require.body.insideScore;
-    var outsideScore = require.body.outsideScore;
-    var athleticism = require.body.athleticism;
-    var playMaking = require.body.playMaking;
-    var rebounding = require.body.rebounding;
-    var defending = require.body.defending;
-    if (pID == '') throw err;
-    if (teamID == '') teamID = -1;
-    if (pHeight == '') pHeight = -1;
-    if (pWeight == '') pWeight = -1;
-    if (overall == '') overall = -1;
-    if (insideScore == '') insideScore = -1;
-    if (outsideScore == '') outsideScore = -1;
-    if (athleticism == '') athleticism = -1;
-    if (playMaking == '') playMaking = -1;
-    if (rebounding == '') rebounding = -1;
-    if (defending == '') defending = -1;
-    var s = "update Players set pAttr=?, teamID=?, pName=?, pPos=?, pHeight=?, pWeight=?, overall=?, insideScore=?, outsideScore=?, athleticism=?, playMaking=?, rebounding=?, defending=? where pID=?";
-    db.query(s, [pAttr, teamID, pName, pPos, pHeight, pWeight, overall, insideScore, outsideScore, athleticism, playMaking, rebounding, defending, pID], function (err, result) {
+// DONE: Get Max DR_NO
+app.get("/api/get/maxdrno", (require, response) => {
+    const sqlSelect = "SELECT MAX(DR_NO) as maxDRNO from CrimeReports";
+    db.query(sqlSelect, function (err, result, fields) {
+        console.log(result);
+        response.send(result);
         if (err) throw err;
+    });
+});
+
+
+// TODO: Insert/Update a player's information
+app.post("/api/insert/crime/:maxDRNO", (require, response) => {
+    // Get present day's date in a suitable format for Date_Rptd
+    const currentDate = new Date();
+    const {maxDRNO} = require.params;
+    const Date_Rptd = currentDate.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+    var DR_NO = parseInt(maxDRNO);
+    var Date_Occ = require.body.Date_Occ ;
+    var Time_Occ = require.body.TimeOcc ;
+    var Area = require.body.Area ;
+    var CrmCd = require.body.CrmCd ;
+    var Vict_Age = require.body.Vict_Age ;
+    var Vict_Sex = require.body.Vict_Sex ;
+    var Vict_Descent = require.body.Vict_Descent ;
+    var Premis_Cd = require.body.Premis_Cd ;
+    var Weapon_Used_Cd = require.body.Weapon_Used_Cd ;
+    var Location = require.body.Location ;
+    var Latitude = require.body.Latitude ;
+    var Longitude = require.body.Longitude ;
+    var Reported_By = require.body.Reported_By ;
+    var Status = '';
+    var Rpt_Dist_No = '';
+    var Verified = '';
+    if (DR_NO == '') throw err;
+    if (Date_Occ == '') throw err;
+    if (Time_Occ == '') throw err;
+    if (Area == '') Area = "Central";
+    if (CrmCd == '') throw err;
+    if (Vict_Sex == '') throw err;
+    if (Premis_Cd == '') Premis_Cd = "SIDEWALK";
+    if (Vict_Descent == '') throw err;
+    if (Vict_Age == '') Vict_Age = 1;
+    if (Reported_By == '') Reported_By = "Anonymous";
+    if (Longitude == '') Longitude = -1;
+    if (Latitude == '') Latitude = -1;
+    if (Location == '') Location = "NULL";
+    if (Weapon_Used_Cd == '') Weapon_Used_Cd = "NULL";
+    if (Status == '') Status = "IC";
+    if (Rpt_Dist_No == '') Rpt_Dist_No = 1;
+    if (Verified == '') Verified = "Not_verified";
+
+    var s = "INSERT INTO CrimeReports VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? )";
+    db.query(s, [DR_NO, Date_Rptd, Date_Occ, Time_Occ, Area, Rpt_Dist_No,CrmCd, Vict_Age, Vict_Sex, Vict_Descent, Premis_Cd, Weapon_Used_Cd, Status, Location, Latitude,Longitude,Verified,Reported_By], function (err, result) {
+        if (err) {
+            console.error(err);
+            response.status(500).send("Error inserting data into the database");
+        } 
+        else {
+            response.status(200).send("successfull");
+        }
     });
 });
 
