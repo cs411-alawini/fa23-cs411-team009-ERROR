@@ -1,156 +1,73 @@
 import React, { useState, useEffect } from "react";
-import Axios from 'axios';
-import './Pages.css';
-import * as AiIcons from 'react-icons/ai';
+import { PieChart, Pie, Cell } from "recharts";
+import Axios from "axios";
 
-// function App() {
-//   const [userID, setUserID] = useState(1);
+// const data = [
+//   { name: "Group A", value: 400 },
+//   { name: "Group B", value: 300 },
+//   { name: "Group C", value: 300 },
+//   { name: "Group D", value: 200 },
+// ];
 
-//   const [crimeReportList, setcrimeReportList] = useState([]);
-//   useEffect(() => {
-//     Axios.get(`http://localhost:3002/api/get`)
-//       .then((response) => {
-//         console.log(response.data)
-//         setcrimeReportList(response.data)
-//       })
-//   }, [])
+const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
-//   const [search, setSearch] = useState('');
-//   const handleChange = e => {
-//     setSearch(e.target.value);
-//   };
+const RADIAN = Math.PI / 180;
+const renderCustomizedLabel = ({
+  cx,
+  cy,
+  midAngle,
+  innerRadius,
+  outerRadius,
+  percent,
+  index,
+}) => {
+  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
-//   // TODO: Add a new player to the team
-//   const reportCrime = (userID, pID) => {
-//     Axios.put(`http://localhost:3002/api/update/add_player`, {
-//       userID: userID,
-//       pID: pID,
-//     });
-//   };
+  return (
+    <text
+      x={x}
+      y={y}
+      fill="white"
+      textAnchor={x > cx ? "start" : "end"}
+      dominantBaseline="central"
+    >
+      {`${(percent * 100).toFixed(0)}%`}
+    </text>
+  );
+};
+// Documentation: https://recharts.org/en-US/examples/PieChartWithCustomizedLabel
+export default function App() {
+  const [weaponCountData, setWeaponCountData] = useState([]);
 
-//   const filteredPlayers = crimeReportList.filter(player =>
-//     String(player.DR_NO).includes(search.toLowerCase())
-//   );
+  useEffect(() => {
+    Axios.get(`http://localhost:3002/api/get/crimetypes`)
+      .then((response) => {
+        console.log(response.data);
+        setWeaponCountData(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching weapon count:", error);
+      });
+  }, []);
 
-//   const getHeadings = () => {
-//     return crimeReportList.keys(crimeReportList[0]);
-//   };
-
-//   return (
-//     <div className="App">
-//       <div className='player-search'>
-//         <h1 className='player-text'>Search </h1>
-//         <form>
-//           <input
-//             className='player-input'
-//             type='text'
-//             onChange={handleChange}
-//             placeholder='Search'
-//           />
-//         </form>
-//       </div>
-//       <table>
-//        <thead>
-//           <tr>
-//            {getHeadings(heading => {
-//              return <th key={heading}>{heading}</th>
-//            })}
-//          </tr>
-//        </thead>
-//        <tbody>
-//            {filteredPlayers.map((row, index) => {
-//                return <tr key={index}>
-//                    {filteredPlayers.map((key, index) => {
-//                         return <td key={row[key]}>{row[key]}</td>
-//                    })}
-//              </tr>;
-//            })}
-//        </tbody>
-//       </table>
-//       {filteredPlayers.map(player =>
-//         <div
-//           key={player.pID}>
-//           <div className="card1">
-//             <p> DR_NO <br /> {player.DR_NO}</p>
-//             {/* <p> Date_Rptd <br /> {player.Date_Rptd}</p> */}
-//             {/* <p> Date_Occ <br /> {player.Date_Occ}</p> */}
-//             {/* <p> Time_Occ <br /> {player.Time_Occ}</p> */}
-//             <p> Area <br /> {player.Area}</p>
-//             <p> Rpt_Dist_No <br /> {player.Rpt_Dist_No}</p>
-//             <p> CrmCd <br /> {player.CrmCd}</p>
-//             <p> Vict_Age <br /> {player.Vict_Age}</p>
-//             <p> Vict_Sex <br /> {player.Vict_Sex}</p>
-//             <p> Vict_Descent <br /> {player.Vict_Descent}</p>
-//             <p> Premis_Cd <br /> {player.Premis_Cd}</p>
-//             <p> Weapon_Used_cd <br /> {player.Weapon_Used_cd}</p>
-//             <p> Location <br /> {player.Location}</p>
-//             <p> Latitude <br /> {player.Latitude}</p>
-//             <p> Longitude <br /> {player.Longitude}</p>
-//             <p> Verified <br /> {player.Verified}</p>
-//             <p> Reported_By <br /> {player.Reported_By}</p>
-//             <button onClick={() => { reportCrime(userID, player.pID) }} className="btn btn-act" data-toggle="modal"><AiIcons.AiOutlinePlusCircle /> </button>
-//           </div>
-//         </div>
-//       )}
-//     </div>
-//   );
-
-const SmallBoxWithFields = () => {
-    const [genderCountData, setGenderCountData] = useState([]);
-  
-    useEffect(() => {
-      Axios.get(`http://localhost:3002/api/get/gendercount`)
-        .then((response) => {
-          console.log(response.data);
-          setGenderCountData(response.data);
-        })
-        .catch((error) => {
-          console.error("Error fetching gender count:", error);
-        });
-    }, []);
-  
-    return (
-      <div style={styles.container}>
-        <h2 style={styles.heading}>Victims Gender Count</h2>
-  
-        {genderCountData.map((genderData) => (
-          <div key={genderData.Gender} style={styles.numberContainer}>
-            <p style={styles.label}>{genderData.Gender === 'M' ? 'Male' : 'Female'}:</p>
-            <div style={styles.number}>{genderData.NumCrimes}</div>
-          </div>
+  return (
+    <PieChart width={1000} height={1000}>
+      <Pie
+        data={weaponCountData}
+        cx={200}
+        cy={200}
+        labelLine={false}
+        label={renderCustomizedLabel}
+        outerRadius={80}
+        fill="#8884d8"
+        dataKey="NumCrimes"
+      >
+        {weaponCountData.map((entry, index) => (
+          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
         ))}
-      </div>
-    );
-  };
-  
-  const styles = {
-    container: {
-      border: '1px solid #ddd',
-      borderRadius: '5px',
-      padding: '15px',
-      width: '250px',
-      margin: '20px',
-      color: 'white',
-      backgroundColor: '#333',
-    },
-    heading: {
-      fontSize: '1.5em',
-      marginBottom: '10px',
-    },
-    numberContainer: {
-      marginBottom: '10px',
-    },
-    label: {
-      marginBottom: '5px',
-      color: '#bbb', // Lighter color for labels
-    },
-    number: {
-      padding: '8px',
-      borderRadius: '3px',
-      backgroundColor: '#555', // Darker background for numbers
-      color: 'white',
-      textAlign: 'center',
-    },
-  };
-  
-  export default SmallBoxWithFields;
+      </Pie>
+    </PieChart>
+  );
+}
