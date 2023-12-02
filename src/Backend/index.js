@@ -40,7 +40,7 @@ app.get("/api/get/gendercount", (require, response) => {
 // Crime Types
 app.get("/api/get/crimetypes", (require, response) => {
   const sqlSelect =
-    "SELECT Weapon_Used_cd, COUNT(*) AS NumCrimes FROM CrimeReports WHERE Weapon_Used_cd IS NOT NULL GROUP BY Weapon_Used_cd ORDER BY NumCrimes LIMIT 10;";
+    "SELECT Weapon_Desc, COUNT(*) AS NumCrimes FROM CrimeReports NATURAL JOIN WeaponsUsed WHERE Weapon_Used_cd IS NOT NULL GROUP BY Weapon_Used_cd ORDER BY NumCrimes LIMIT 10;";
   db.query(sqlSelect, function (err, result, fields) {
     console.log(result);
     response.send(result);

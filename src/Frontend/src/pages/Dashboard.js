@@ -12,31 +12,7 @@ import Axios from "axios";
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
 const RADIAN = Math.PI / 180;
-const renderCustomizedLabel = ({
-  cx,
-  cy,
-  midAngle,
-  innerRadius,
-  outerRadius,
-  percent,
-  index,
-}) => {
-  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-  const x = cx + radius * Math.cos(-midAngle * RADIAN);
-  const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
-  return (
-    <text
-      x={x}
-      y={y}
-      fill="white"
-      textAnchor={x > cx ? "start" : "end"}
-      dominantBaseline="central"
-    >
-      {`${(percent * 100).toFixed(0)}%`}
-    </text>
-  );
-};
 // Documentation: https://recharts.org/en-US/examples/PieChartWithCustomizedLabel
 export default function App() {
   const [weaponCountData, setWeaponCountData] = useState([]);
@@ -52,15 +28,42 @@ export default function App() {
       });
   }, []);
 
+  const renderCustomizedLabel = ({
+    cx,
+    cy,
+    midAngle,
+    innerRadius,
+    outerRadius,
+    percent,
+    index,
+  }) => {
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+    return (
+      <text
+        x={x}
+        y={y}
+        fill="white"
+        textAnchor={x > cx ? "start" : "end"}
+        dominantBaseline="central"
+      >
+        {`${(percent * 100).toFixed(0)}%\n`}
+        {weaponCountData[index]["Weapon_Desc"]}
+      </text>
+    );
+  };
+
   return (
-    <PieChart width={1000} height={1000}>
+    <PieChart width={2000} height={2000}>
       <Pie
         data={weaponCountData}
-        cx={200}
-        cy={200}
+        cx={600}
+        cy={300}
         labelLine={false}
         label={renderCustomizedLabel}
-        outerRadius={80}
+        outerRadius={300}
         fill="#8884d8"
         dataKey="NumCrimes"
       >
