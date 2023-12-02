@@ -7,7 +7,7 @@ export default function SignInPage() {
     return (
         <div className="text-center m-5-auto">
             <h2>Sign in to us</h2>
-            <form action="/home">
+            <form action="/dashboard">
                 <p>
                     <label>Username or email address</label><br/>
                     <input type="text" name="first_name" required />

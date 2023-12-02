@@ -1,4 +1,5 @@
 // Last Modified: Dec 1 2:03 PM by Jiaxi Li
+import React from 'react';
 import { useEffect, useState } from "react";
 
 const Pagination = ({pages, setCurrentPage, currentPlayer, playersList}) => {

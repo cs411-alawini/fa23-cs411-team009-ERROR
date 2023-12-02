@@ -121,8 +121,8 @@
   margin: 0;
   padding: 0;
   font-family: 'Montserrat', sans-serif;
-  background-color: #05111b;
-  color: rgb(250, 250, 250);
+  /* background-color: #05111b;
+  color: rgb(250, 250, 250); */
 }
 
 .coin-app {
