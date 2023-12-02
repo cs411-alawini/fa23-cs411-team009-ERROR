@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { SidebarData } from './SidebarData';
 import './Navbar.css';
 import { IconContext } from 'react-icons';
+import { FaSignInAlt, FaUserPlus, FaBell } from 'react-icons/fa';
 
 function Navbar() {
   const [sidebar, setSidebar] = useState(false);
@@ -13,11 +14,24 @@ function Navbar() {
 
   return (
     <>
+    
       <IconContext.Provider value={{ color: '#fff' }}>
         <div className='navbar'>
           <Link to='#' className='menu-bars'>
             <FaIcons.FaBars onClick={showSidebar} />
           </Link>
+          <ul className="navbar-nav" style={{ display: 'flex', flexDirection: 'row', 'margin-left': 'auto' }}>
+            <li className="nav-item">
+              <a className="nav-link" href="#"><FaBell /></a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="#"><FaSignInAlt /> Sign In</a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="#"><FaUserPlus /> Sign Up</a>
+            </li>
+
+          </ul>
         </div>
         <nav className={sidebar ? 'nav-menu active' : 'nav-menu'}>
           <ul className='nav-menu-items' onClick={showSidebar}>
@@ -39,6 +53,7 @@ function Navbar() {
           </ul>
         </nav>
       </IconContext.Provider>
+      
     </>
   );
 }

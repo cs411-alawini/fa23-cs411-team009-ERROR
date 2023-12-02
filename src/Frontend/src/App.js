@@ -9,13 +9,14 @@ import Home from './pages/Home';
 import MyTeam from './pages/MyTeam';
 import Customized from './pages/Customized';
 import Investigator from './pages/Investigator';
-import MCProvider from './pages/MCProvider';
+import MCProvider from './pages/ReportCrime';
 import AdvancedQuery from './pages/AdvancedQuery';
 import Page from './pages/Page';
 import Tournament from './pages/Tournament';
 import Login from './pages/login';
 import ForgotPassword from './pages/forgotPassword';
 import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
 
 function App() {
   return (
@@ -23,14 +24,16 @@ function App() {
       <Router>
         <Navbar />
         <Routes>
-          <Route path='/' element={<Login/>} />
+          <Route path='/' element={<Dashboard/>} />
           <Route path='/Register' element={<Register/>} />
           <Route path='/forgotPassword' element={<ForgotPassword/>} />
           <Route path='/home' element={<Home/>} />
+          <Route path='/dashboard' element={<Dashboard/>} />
+          <Route path='/login' element={<Login/>} />
           <Route path='/My_Team' element={<MyTeam/>} />
           <Route path='/Tournament' element={<Tournament/>} />
           <Route path='/Investigator' element={<Investigator/>} />
-          <Route path='/MC_Provider' element={<MCProvider/>} />
+          <Route path='/ReportCrime' element={<MCProvider/>} />
           <Route path='/Stadium' element={<Page/>} />
           <Route path='/Customized_players' element={<Customized/>} />
           <Route path='/Advanced_Query' element={<AdvancedQuery/>} />
