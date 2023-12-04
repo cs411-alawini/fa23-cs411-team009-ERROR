@@ -1,30 +1,35 @@
 import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import './Pages.css';
-import {Chart as Chartjs} from 'chart.js/auto';
 import {Line} from 'react-chartjs-2';
-import * as AiIcons from 'react-icons/ai';
+import {Chart as Chartjs} from 'chart.js/auto';
+import { PieChart, Pie, Cell } from "recharts";
 import {
-    Badge,
-    Button,
     Card,
-    Navbar,
-    Nav,
-    Table,
     Container,
     Row,
     Col,
-    Form,
-    OverlayTrigger,
-    Tooltip,
   } from "react-bootstrap";
 
-function App() {
-  const [userID, setUserID] = useState(1);
+const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
-  const [crimeReportList, setcrimeReportList] = useState([]);
+const RADIAN = Math.PI / 180;
+
+function App() {
   const [lineGraphData, setLineGraphData] = useState(null);
   const [genderCountData, setGenderCountData] = useState([]);
+  const [weaponCountData, setWeaponCountData] = useState([]);
+
+  useEffect(() => {
+    Axios.get(`http://localhost:3002/api/get/crimetypes`)
+      .then((response) => {
+        console.log(response.data);
+        setWeaponCountData(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching weapon count:", error);
+      });
+  }, []);
 
     useEffect(() => {
       Axios.get(`http://localhost:3002/api/get/gendercount`)
@@ -72,20 +77,31 @@ function App() {
     setSearch(e.target.value);
   };
 
-  // TODO: Add a new player to the team
-  const reportCrime = (userID, pID) => {
-    Axios.put(`http://localhost:3002/api/update/add_player`, {
-      userID: userID,
-      pID: pID,
-    });
-  };
+  const renderCustomizedLabel = ({
+    cx,
+    cy,
+    midAngle,
+    innerRadius,
+    outerRadius,
+    percent,
+    index,
+  }) => {
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
-  const filteredPlayers = crimeReportList.filter(player =>
-    String(player.DR_NO).includes(search.toLowerCase())
-  );
-
-  const getHeadings = () => {
-    return crimeReportList.keys(crimeReportList[0]);
+    return (
+      <text
+        x={x}
+        y={y}
+        fill="white"
+        textAnchor={x > cx ? "start" : "end"}
+        dominantBaseline="central"
+      >
+        {`${(percent * 100).toFixed(0)}%\n`}
+        {weaponCountData[index]["Weapon_Desc"]}
+      </text>
+    );
   };
 
   return (
@@ -117,7 +133,7 @@ function App() {
         </Row>
         <Row>
             <Col md="7">
-                <Card.Title as="h4">Crime Trend</Card.Title>
+                <Card.Title as="h4">CRIME TREND</Card.Title>
                 <p className="card-category">Number of crimes reported per month!</p>
                 <div className="ct-chart" id="chartHours">
                     {lineGraphData!==null?(
@@ -131,9 +147,24 @@ function App() {
             </Col>    
             <Col md="4">
                 <Card.Title as="h4">PIE CHART PLACEHOLDER</Card.Title>
-                <p className="card-category">Number of crimes reported per month!</p>
+                <p className="card-category">Weapons commonly used!</p>
                 <div className="ct-chart" id="chartHours">
-
+                  <PieChart width={3000} height={3000}>
+                    <Pie
+                      data={weaponCountData}
+                      cx={250}
+                      cy={250}
+                      labelLine={false}
+                      label={renderCustomizedLabel}
+                      outerRadius={250}
+                      fill="#8884d8"
+                      dataKey="NumCrimes"
+                    >
+                      {weaponCountData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                  </PieChart>
                 </div>
             </Col>                
         </Row>

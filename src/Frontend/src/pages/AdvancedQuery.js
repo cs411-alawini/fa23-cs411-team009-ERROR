@@ -1,92 +1,177 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
-import './Pages.css';
 
-function App() {
-  const [userID, setUserID] = useState(1);
-  const [queryResult1, setQueryResult1] = useState([]);
-  const [queryResult2, setQueryResult2] = useState([]);
-  const [displayedQuery, setDisplayedQuery] = useState([]);
-  const [teamNameLike, setteamNameLike] = useState('');
-  const [arenaNameLike, setarenaNameLike] = useState('');
+const PoliceReports = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [isPolice, setIsPolice] = useState('');
+  const [reports, setReports] = useState([]);
 
-  // useEffect(() => {
-  //   Axios.get(`http://localhost:3002/api/get/adv1/`)
-  //   .then((response) => {
-  //     console.log(response.data)
-  //     setQueryResult1(response.data)
-  //   })
-  // },[])
+  useEffect(() => {
+    if (isPolice === 'OK') {
+      fetchCrimeReports();
+    }
+  }, [isPolice]);
 
-  // useEffect(() => {
-  //   Axios.get(`http://localhost:3002/api/get/adv2/`)
-  //   .then((response) => {
-  //     console.log(response.data)
-  //     setQueryResult2(response.data)
-  //   })
-  // },[])
-
-  const adv1 = () => {
-    Axios.get(`http://localhost:3002/api/get/adv1/`)
-      .then((response) => {
-        setQueryResult1(response.data)
-        console.log()
-      });
+  const fetchCrimeReports = async () => {
+    try {
+      const response = await Axios.get('http://localhost:3002/api/get/unverified');
+      setReports(response.data);
+    } catch (error) {
+      console.error('Error fetching crime reports:', error);
+    }
   };
 
-  const adv2 = () => {
-    Axios.get(`http://localhost:3002/api/get/adv2/${teamNameLike}/${arenaNameLike}`).then((response) => {
-      setQueryResult2(response.data);
-      console.log()
-    });
-    //setDisplayedQuery(queryResult2);
+  const handleLogin = async () => {
+    try {
+      fetch('http://localhost:3002/api/police_login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username, password })
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Login api failed');
+          }
+          return response.text();
+        })
+        .then(data => {
+          setIsPolice(data);
+        })
+        .catch(error => {
+          console.error('There was an error!', error);
+        });
+
+      if (isPolice === 'OK') {
+        alert('Police Login Successful!');
+      } else if (isPolice === 'NOTOK') {
+        alert('Incorrect login credentials! Please try again.');
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  const handleVerify = async (reportId) => {
+    try {
+      const response = await fetch(`http://localhost:3002/api/update/verify-report/${reportId}`, {
+        method: 'PUT',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to verify report');
+      } else {
+        alert('Crime Verified!');
+      }
+      fetchCrimeReports();
+    } catch (error) {
+      console.error('Error verifying report:', error);
+    }
+  };
+
+  const handleDelete = async (reportId) => {
+    try {
+      const response = await fetch(`http://localhost:3002/api/update/delete-report/${reportId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete report');
+      } else {
+        alert('Crime Report Deleted!');
+      }
+      fetchCrimeReports();
+    } catch (error) {
+      console.error('Error deleting report:', error);
+    }
   };
 
   return (
-
-    <div className="App">
-
-      <button onClick={() => { adv1(); }}> Advanced Query 1</button>
-      <h1 className='player-text'>Advanced Query 1</h1>
-      {queryResult1.map(object =>
-        <div
-          key={object.teamName}>
-          <div className="card1">
-            <p> teamName <br /> {object[Object.keys(queryResult1[0])[0]]}</p>
-            <p> MCFee <br /> {object[Object.keys(queryResult1[0])[1]]}</p>
-          </div>
-        </div>
-      )}
-      <br/><br/>
-      <div className="advanced_query2">
-        <label> teamNameLike</label>
-        <input type="text" name="teamNameLike" onChange={(e) => {
-          setteamNameLike(e.target.value)
-          console.log({ teamNameLike })
-        }} />
-        <label> arenaNameLike</label>
-        <input type="text" name="arenaNameLike" onChange={(e) => {
-          setarenaNameLike(e.target.value)
-          console.log({ arenaNameLike })
-        }} />
+    <div>
+      <div style={{ marginBottom: '20px' }}>
+        <h2>Police Login</h2>
+        <form>
+          <label>Username:</label>
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            style={{ width: '100%', padding: '8px', marginBottom: '10px', border: '1px solid #ccc', borderRadius: '4px', boxSizing: 'border-box' }}
+          />
+          <br />
+          <label>Password:</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            style={{ width: '100%', padding: '8px', marginBottom: '10px', border: '1px solid #ccc', borderRadius: '4px', boxSizing: 'border-box' }}
+          />
+          <br />
+          <button
+            type="button"
+            onClick={handleLogin}
+            style={{ padding: '10px 20px', backgroundColor: '#4caf50', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+          >
+            Login
+          </button>
+        </form>
       </div>
-      <button onClick={() => { adv2(); }}> Advanced Query 2</button>
-
-      <h1 className='player-text'>Advanced Query 2</h1>
-      {queryResult2.map(object =>
-        <div
-          key={object.teamName}>
-          <div className="card1">
-            <p> arOpenYear <br /> {object[Object.keys(queryResult2[0])[0]]}</p>
-            <p> capacityBuilt <br /> {object[Object.keys(queryResult2[0])[1]]}</p>
-          </div>
-        </div>
-      )}
-
-
+      <div>
+        <h2>Unverified Reports</h2>
+        <table className="crime-reports-table">
+        <thead>
+          <tr>
+          <th>DR_NO</th>
+            <th>Date_Rptd</th>
+            <th>Date_Occ</th>
+            <th>Time_Occ</th>
+            <th>Area</th>
+            <th>Rpt_Dist_No</th>
+            <th>CrmCd</th>
+            <th>Vict_Age</th>
+            <th>Vict_Sex</th>
+            <th>Vict_Descent</th>
+            <th>Premis_Cd</th>
+            <th>Status</th>
+            <th>Location</th>
+            <th>Reported_By</th>
+            <th>Verify</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          {reports.map((report) => (
+            <tr key={report.DR_NO}>
+            <td>{report.DR_NO}</td>
+            <td>{report.Date_Rptd}</td>
+            <td>{report.Date_Occ}</td>
+            <td>{report.Time_Occ}</td>
+            <td>{report.Area}</td>
+            <td>{report.Rpt_Dist_No}</td>
+            <td>{report.CrmCd}</td>
+            <td>{report.Vict_Age}</td>
+            <td>{report.Vict_Sex}</td>
+            <td>{report.Vict_Descent}</td>
+            <td>{report.Premis_Cd}</td>
+            <td>{report.Status}</td>
+            <td>{report.Location}</td>
+            <td>{report.Reported_By}</td>
+            <td>
+                <button onClick={() => handleVerify(report.DR_NO)}>Verify</button>
+              </td>
+              <td>
+                <button onClick={() => handleDelete(report.DR_NO)}>Delete</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      </div>
     </div>
-
   );
-}
+};
 
-export default App;
+export default PoliceReports;

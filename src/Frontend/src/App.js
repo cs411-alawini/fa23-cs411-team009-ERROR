@@ -5,8 +5,8 @@ import Axios from 'axios';
 import Navbar from './components/Navbar/Navbar';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import Home from './pages/Home';
-import MyTeam from './pages/MyTeam';
+import Search from './pages/Search';
+// import MyTeam from './pages/home';
 import Customized from './pages/Customized';
 import Investigator from './pages/Investigator';
 import MCProvider from './pages/ReportCrime';
@@ -27,10 +27,10 @@ function App() {
           <Route path='/' element={<Dashboard/>} />
           <Route path='/Register' element={<Register/>} />
           <Route path='/forgotPassword' element={<ForgotPassword/>} />
-          <Route path='/home' element={<Home/>} />
+          <Route path='/search' element={<Search/>} />
           <Route path='/dashboard' element={<Dashboard/>} />
           <Route path='/login' element={<Login/>} />
-          <Route path='/My_Team' element={<MyTeam/>} />
+          {/* <Route path='/My_Team' element={<MyTeam/>} /> */}
           <Route path='/Tournament' element={<Tournament/>} />
           <Route path='/Investigator' element={<Investigator/>} />
           <Route path='/ReportCrime' element={<MCProvider/>} />

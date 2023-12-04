@@ -382,3 +382,32 @@
   color: #e2e2e2;
 }
 */
+
+.crime-reports-container {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+}
+
+.crime-reports-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.crime-reports-table th,
+.crime-reports-table td {
+  border: 1px solid #dddddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.crime-reports-table th {
+  background-color: #f2f2f2;
+}
+
+.crime-reports-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.crime-reports-table tr:hover {
+  background-color: #f2f2f2;
+}

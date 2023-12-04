@@ -110,7 +110,7 @@ app.get("/api/search", (request, response) => {
     if (Weapons) sqlSearch += ` AND Weapon_Desc = '${Weapons}' `;
     if (Crimes) sqlSearch += ` AND Crm_Cd_Desc = '${Crimes}' `;
     if (Premis) sqlSearch += ` AND Premis_Desc = '${Premis}' `;
-    if (Status) sqlSearch += ` AND Status = '${Status}' `;
+    if (Status) sqlSearch += ` AND StatusDesc = '${Status}' `;
     
     // Join the conditions with 'AND'
     sqlSearch += ' LIMIT 1000';
@@ -138,6 +138,155 @@ app.get("/api/get/gendercount", (require, response) => {
         if (err) throw err;
     });
 });
+
+// Crime Types
+app.get("/api/get/crimetypes", (require, response) => {
+    const sqlSelect =
+      "SELECT Weapon_Desc, COUNT(*) AS NumCrimes FROM CrimeReports NATURAL JOIN WeaponsUsed WHERE Weapon_Used_cd IS NOT NULL GROUP BY Weapon_Used_cd ORDER BY NumCrimes LIMIT 10;";
+    db.query(sqlSelect, function (err, result, fields) {
+      console.log(result);
+      response.send(result);
+      if (err) throw err;
+    });
+  });
+
+// DONE: Get Un_verified crimereports
+app.get("/api/get/unverified", (require, response) => {
+    const sqlSelect = "SELECT * FROM CrimeReports WHERE Verified = 'Not_Verified';";
+    db.query(sqlSelect, function (err, result, fields) {
+        console.log(result);
+        response.send(result);
+        if (err) throw err;
+    });
+});
+
+// DONE: Verify Un_verified crimereports
+app.put("/api/update/verify-report/:field", (require, response) => {
+    const {field} = require.params;
+    var s = "UPDATE CrimeReports SET Verified = 'Verified' WHERE DR_NO = ? ;";
+    db.query(s, [parseInt(field)], function (err, result) {
+        if (err) {
+            console.error(err);
+            response.status(500).send("Error verifying crime report!");
+        } 
+        else {
+            response.status(200).send("successfull");
+        }
+    });
+});
+
+// DONE: Delete Un_verified crimereports
+app.delete("/api/update/delete-report/:field", (require, response) => {
+    const {field} = require.params;
+    var s = "DELETE from CrimeReports WHERE DR_NO = ?;";
+    db.query(s, [parseInt(field)], function (err, result) {
+        if (err) {
+            console.error(err);
+            response.status(500).send("Error deleting crime report");
+        } 
+        else {
+            response.status(200).send("successfull");
+        }
+    });
+});
+
+app.post('/api/police_login', (req, response) => {
+    const { username, password } = req.body;
+  
+    // Find user by username and password
+    const sqlSelect = "SELECT * FROM UserLogin WHERE Username = ? AND Password = ? AND AccessControl= 'Police';";
+    db.query(sqlSelect, [username, password], (err, result) => {
+        console.log(result);
+      if (err) {
+        console.error('Error querying database:', err);
+        return res.status(500).json({ message: 'Internal Server Error' });
+      }
+  
+      if (result.length === 0) {
+        response.status(200).send("NOTOK");
+      }
+      else{
+        // Successful login
+        response.status(200).send("OK");
+      }
+    });
+  });
+
+  app.post('/api/register', (req, res) => {
+    const {
+      username,
+      accessControl,
+      password,
+      address,
+      phone,
+      email,
+      lat,
+      long,
+      receiveAlerts,
+      alertRadius,
+      typeOfAlert,
+    } = req.body;
+  
+    // Check if the username or email already exists
+    const sqlCheckExistence = 'SELECT * FROM UserLogin WHERE Username = ? OR Email = ?';
+    db.query(sqlCheckExistence, [username, email], (checkErr, result) => {
+      if (checkErr) {
+        console.error('Error checking existence:', checkErr);
+        return res.status(500).json({ message: 'Internal Server Error' });
+      }
+  
+      if (result.length > 0) {
+        return res.status(409).json({ message: 'Username or email already exists' });
+      }
+  
+      // Insert the new user
+      const sqlInsert = `INSERT INTO UserLogin VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+      const values = [
+        username,
+        accessControl,
+        password,
+        address,
+        phone,
+        email,
+        parseFloat(lat),  // Convert to double
+        parseFloat(long), // Convert to double
+        receiveAlerts,
+        parseInt(alertRadius, 10), // Convert to int
+        typeOfAlert,
+      ];
+      
+      db.query(sqlInsert, values, (insertErr) => {
+        console.log(sqlInsert);
+        if (insertErr) {
+          console.error('Error inserting user:', insertErr);
+          return res.status(500).json({ message: 'Internal Server Error' });
+        }
+  
+        res.json({ message: 'User registered successfully' });
+      });
+    });
+  });
+
+  app.post('/api/login', (req, res) => {
+    const { username, password } = req.body;
+  
+    // Find user by username and password
+    const sqlSelect = 'SELECT * FROM UserLogin WHERE Username = ? AND Password = ?';
+    db.query(sqlSelect, [username, password], (err, result) => {
+      if (err) {
+        console.error('Error querying database:', err);
+        return res.status(500).json({ message: 'Internal Server Error' });
+      }
+  
+      if (result.length === 0) {
+        res.json({ message: 'NOTOK' });
+      }
+      else{
+        res.json({ message: 'OK' });
+      }
+    });
+  });  
+
 
 app.listen(3002, () => {
     console.log("running on port 3002");

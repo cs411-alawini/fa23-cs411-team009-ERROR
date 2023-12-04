@@ -26,7 +26,7 @@ function App() {
     fetchUniqueValues('Weapon_Desc', setWeaponNames);
     fetchUniqueValues('Crm_Cd_Desc', setCrimeCodeNames);
     fetchUniqueValues('Premis_Desc', setPremisCodeNames);
-    fetchUniqueValues('Status', setStatusNames);
+    fetchUniqueValues('StatusDesc', setStatusNames);
 
   }, [])
 
@@ -54,7 +54,7 @@ function App() {
       Weapon_Desc: row.Weapon_Desc,
       Premis_Desc : row.Premis_Desc,
       Crm_Cd_Desc: row.Crm_Cd_Desc,
-      Status: row.Status,
+      Status: row.StatusDesc,
       Location: row.Location,
       Latitude: row.Latitude,
       Longitude: row.Longitude,
@@ -124,7 +124,7 @@ function App() {
   <div style={{ marginRight: '10px' }}>
     <label>CrimeCodes :</label>
     <select
-      value={searchData.Weapons}
+      value={searchData.Crimes}
       onChange={(e) => handleSearchChange('Crimes', e.target.value)}
     >
       <option value="">Select Crime</option>
@@ -136,7 +136,7 @@ function App() {
   <div style={{ marginRight: '10px' }}>
     <label>Premis :</label>
     <select
-      value={searchData.Weapons}
+      value={searchData.Premis}
       onChange={(e) => handleSearchChange('Premis', e.target.value)}
     >
       <option value="">Select Premis</option>
