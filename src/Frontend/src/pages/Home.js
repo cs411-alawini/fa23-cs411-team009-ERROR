@@ -124,7 +124,7 @@ function App() {
   <div style={{ marginRight: '10px' }}>
     <label>CrimeCodes :</label>
     <select
-      value={searchData.Weapons}
+      value={searchData.Crimes}
       onChange={(e) => handleSearchChange('Crimes', e.target.value)}
     >
       <option value="">Select Crime</option>
@@ -136,7 +136,7 @@ function App() {
   <div style={{ marginRight: '10px' }}>
     <label>Premis :</label>
     <select
-      value={searchData.Weapons}
+      value={searchData.Premis}
       onChange={(e) => handleSearchChange('Premis', e.target.value)}
     >
       <option value="">Select Premis</option>
@@ -161,7 +161,7 @@ function App() {
     <button onClick={handleSearch}>Search</button>
   </div>
 </div>
-      <div style={{ height: '100%', width: '100%', marginBottom: '20px' }}>
+      <div style={{ height: '100%', width: '100%', marginBottom: '20px'}}>
       <DataGrid
         rows={formattedRows}
         columns={[

@@ -16,6 +16,26 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 
+app.post('/api/login', (req, res) => {
+    const { username, password } = req.body;
+  
+    // Find user by username and password
+    const sqlSelect = 'SELECT * FROM UserLogin WHERE Username = ? AND Password = ?';
+    db.query(sqlSelect, [username, password], (err, result) => {
+      if (err) {
+        console.error('Error querying database:', err);
+        return res.status(500).json({ message: 'Internal Server Error' });
+      }
+  
+      if (result.length === 0) {
+        res.json({ message: 'NOTOK' });
+      }
+      else{
+        res.json({ message: 'OK' });
+      }
+    });
+  });  
+
 // DONE: Get CrimeReports
 app.get("/api/get", (request, response) => {
     const sqlSelect = "SELECT * FROM CrimeReports NATURAL JOIN AreaMapping NATURAL JOIN WeaponsUsed NATURAL JOIN PremisCodes NATURAL JOIN CrimeStatus NATURAL JOIN CrimeCodes limit 10";
@@ -29,7 +49,6 @@ app.get("/api/get", (request, response) => {
 app.get("/api/get/linegraphdata", (require, response) => {
     const sqlSelect = "SELECT CONCAT(month,' ',year) as monthyear, crimecount from (SELECT MONTH(Date_Occ) as month ,DATE_FORMAT(Date_Occ,'%Y') as year, COUNT(*) AS crimecount FROM CrimeReports GROUP BY DATE_FORMAT(Date_Occ,'%Y'), MONTH(Date_Occ) ORDER BY DATE_FORMAT(Date_Occ,'%Y'), MONTH(Date_Occ)) as temp;";
     db.query(sqlSelect, function (err, result, fields) {
-        console.log(result);
         response.send(result);
         if (err) throw err;
     });
@@ -39,7 +58,6 @@ app.get("/api/get/linegraphdata", (require, response) => {
 app.get("/api/get/maxdrno", (require, response) => {
     const sqlSelect = "SELECT MAX(DR_NO) as maxDRNO from CrimeReports";
     db.query(sqlSelect, function (err, result, fields) {
-        console.log(result);
         response.send(result);
         if (err) throw err;
     });
@@ -133,11 +151,65 @@ app.get("/api/uniqueSearchValues/:field", (request, response) => {
 app.get("/api/get/gendercount", (require, response) => {
     const sqlSelect = "SELECT Vict_Sex AS Gender, COUNT(*) AS NumCrimes FROM CrimeReports WHERE Vict_Sex = 'M' OR Vict_Sex = 'F'  GROUP BY Vict_Sex;";
     db.query(sqlSelect, function (err, result, fields) {
-        console.log(result);
         response.send(result);
         if (err) throw err;
     });
 });
+
+app.post('/api/register', (req, res) => {
+    const {
+      username,
+      accessControl,
+      password,
+      address,
+      phone,
+      email,
+      lat,
+      long,
+      receiveAlerts,
+      alertRadius,
+      typeOfAlert,
+    } = req.body;
+  
+    // Check if the username or email already exists
+    const sqlCheckExistence = 'SELECT * FROM UserLogin WHERE Username = ? OR Email = ?';
+    db.query(sqlCheckExistence, [username, email], (checkErr, result) => {
+      if (checkErr) {
+        console.error('Error checking existence:', checkErr);
+        return res.status(500).json({ message: 'Internal Server Error' });
+      }
+  
+      if (result.length > 0) {
+        return res.status(409).json({ message: 'Username or email already exists' });
+      }
+  
+      // Insert the new user
+      const sqlInsert = `INSERT INTO UserLogin VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+      const values = [
+        username,
+        accessControl,
+        password,
+        address,
+        phone,
+        email,
+        parseFloat(lat),  // Convert to double
+        parseFloat(long), // Convert to double
+        receiveAlerts,
+        parseInt(alertRadius, 10), // Convert to int
+        typeOfAlert,
+      ];
+      
+      db.query(sqlInsert, values, (insertErr) => {
+        console.log(sqlInsert);
+        if (insertErr) {
+          console.error('Error inserting user:', insertErr);
+          return res.status(500).json({ message: 'Internal Server Error' });
+        }
+  
+        res.json({ message: 'User registered successfully' });
+      });
+    });
+  });
 
 app.listen(3002, () => {
     console.log("running on port 3002");

@@ -25,15 +25,15 @@ function Navbar() {
               <a className="nav-link" href="#"><FaBell /></a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#"><FaSignInAlt /> Sign In</a>
+              <a className="nav-link" href="/login"><FaSignInAlt /> Sign In</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#"><FaUserPlus /> Sign Up</a>
+              <a className="nav-link" href="/Register"><FaUserPlus /> Sign Up</a>
             </li>
 
           </ul>
         </div>
-        <nav className={sidebar ? 'nav-menu active' : 'nav-menu'}>
+        <nav className={sidebar ? 'nav-menu active' : 'nav-menu'} style={{ zIndex: 2 }}>
           <ul className='nav-menu-items' onClick={showSidebar}>
             <li className='navbar-toggle'>
               <Link to='#' className='menu-bars'>

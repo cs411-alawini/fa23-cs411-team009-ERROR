@@ -14,7 +14,6 @@ import AdvancedQuery from './pages/AdvancedQuery';
 import Page from './pages/Page';
 import Tournament from './pages/Tournament';
 import Login from './pages/login';
-import ForgotPassword from './pages/forgotPassword';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 
@@ -26,7 +25,6 @@ function App() {
         <Routes>
           <Route path='/' element={<Dashboard/>} />
           <Route path='/Register' element={<Register/>} />
-          <Route path='/forgotPassword' element={<ForgotPassword/>} />
           <Route path='/home' element={<Home/>} />
           <Route path='/dashboard' element={<Dashboard/>} />
           <Route path='/login' element={<Login/>} />
