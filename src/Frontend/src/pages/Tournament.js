@@ -1,52 +1,75 @@
-import React, {useState, useEffect} from "react";
-import Axios from 'axios';
-import './Pages.css';
+import React, { useState, useEffect } from "react";
+import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
+import Axios from "axios";
+
+const containerStyle = {
+  width: "100%",
+  height: "590px",
+};
+
+// Center of Los Angeles
+const center = {
+  lat: 34.0549,
+  lng: -118.2426,
+};
+
+// const locationsData = [
+//   { Latitude: 34.0522, Longitude: -118.2437 },
+//   { Latitude: 33.7873, Longitude: -118.2356 },
+//   { Latitude: 34.0686, Longitude: -118.1431 },
+// ];
 
 function App() {
-  const [userID, setUserID] = useState(1);
-  const [allTournaments, setAllTournaments] = useState([]);
-  const [allMatches, setAllMatches] = useState([]);
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: "AIzaSyCuluqIJwBbz_OMmqHXS8u2oxc_qxI-_40",
+  });
 
+  const [locationsData, setLocationsData] = useState([]);
   useEffect(() => {
-    Axios.get(`http://localhost:3002/api/get/tournament/`)
-    .then((response) => {
-      //console.log(response.data)
-      setAllTournaments(response.data[0])
-      setAllMatches(response.data[1])
-    })
-  },[])
+    Axios.get(`http://localhost:3002/api/get/crimelocations`)
+      .then((response) => {
+        console.log(response.data);
+        setLocationsData(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching locations:", error);
+      });
+  }, []);
+  console.log(locationsData);
 
-  return (
+  const [map, setMap] = React.useState(null);
 
-    <div className="App">
-      <h0 className='player-text'>Tournament Held between Teams 1 - 10, Arena Capacity {'>='} 18000, Top 5 Players each Team</h0>
-      <br/><br/>
-      <h1 className='player-text'>Tournament Result</h1>
-      {allTournaments.map(tournament =>
-        <div
-          key={tournament.team_name}> 
-          <div className = "card1">
-            <p>Team ID <br /> {tournament.team_id}</p>
-            <p>Team Name <br /> {tournament.team_name}</p>
-            <p>Score <br /> {tournament.cnt}</p>
-          </div>
-        </div>
-      )}
+  const onLoad = React.useCallback(function callback(map) {
+    const bounds = new window.google.maps.LatLngBounds(center);
+    map.fitBounds(bounds);
 
-      <h2 className='player-text2'>Matches</h2>
-      {allMatches.map(matches =>
-        <div
-          key={matches.match_id}>
-          <div className="card1">
-            <p>Match ID <br /> {matches.match_id}</p>
-            <p>Home Team <br /> {matches.team1}</p>
-            <p>Away Team <br /> {matches.team2}</p>
-            <p>Winner <br /> {matches.winner}</p>
-          </div>
-        </div>
-      )}
-    </div>
+    setMap(map);
+  }, []);
 
+  const onUnmount = React.useCallback(function callback(map) {
+    setMap(null);
+  }, []);
+
+  return isLoaded ? (
+    <GoogleMap
+      mapContainerStyle={containerStyle}
+      defaultCenter={center}
+      defaultZoom={8}
+      onLoad={onLoad}
+      onUnmount={onUnmount}
+    >
+      {/* Child components, such as markers, info windows, etc. */}
+      {locationsData.map((location, index) => (
+        <Marker
+          key={index}
+          position={{ lat: location.Latitude, lng: location.Longitude }}
+        />
+      ))}
+      <></>
+    </GoogleMap>
+  ) : (
+    <></>
   );
 }
 
