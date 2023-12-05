@@ -95,14 +95,14 @@ function MyForm() {
         <div>
           
         </div>
-        <div>
-          <h4>Fill below form to report a crime! </h4>
+        <div style={{padding:'10px'}}>
+          <h4 >FILL THE FORM BELOW TO REPORT A CRIME! </h4>
         </div>
       </Row>
       <Row>
         <form onSubmit={handleSubmit}>
           <div>
-            <label htmlFor="Reported_By" required="false">Reported_By:</label>
+            <label htmlFor="Reported_By" required="false">Reported_By: </label>
             <input
               type="text"
               id="Reported_By"
@@ -379,7 +379,7 @@ function MyForm() {
               <option value="450">THEFT FROM PERSON - ATTEMPT</option>
             </select>
           </div>
-          <button type="submit">Submit</button>
+          <button type="submit" style={{backgroundColor:'#2278c9', color:'white'}}>Submit</button>
         </form>
       </Row>
     </Container>

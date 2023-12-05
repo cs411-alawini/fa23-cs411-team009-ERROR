@@ -20,7 +20,7 @@ function App() {
       <Router>
         <Navbar />
         <Routes>
-          <Route path='/' element={<Dashboard/>} />
+          <Route path='/' element={<Login/>} />
           <Route path='/Register' element={<Register/>} />
           <Route path='/search' element={<Search/>} />
           <Route path='/dashboard' element={<Dashboard/>} />

@@ -49,7 +49,7 @@ function App() {
     useEffect(() => {
       Axios.get(`http://localhost:3002/api/getlatest`)
         .then((response) => {
-          setLatestAlertData(response.data);
+          setLatestAlertData(response.data[0]);
           console.log("Latest Alert : " ,latestAlertData);
         })
         .catch((error) => {
@@ -110,7 +110,8 @@ function App() {
       <text
         x={x}
         y={y}
-        fill="white"
+        fill="black"
+        font-size = "8px"
         textAnchor={x > cx ? "start" : "end"}
         dominantBaseline="central"
       >
@@ -128,7 +129,7 @@ function App() {
             <Col md="5"></Col>
         </Row>
         <Row>
-            {/* <Col><h3 style={{backgroundColor: 'red', color:'white'}}>ALERT! {latestAlertData.Crm_Cd_Desc} at {latestAlertData.Location} !</h3></Col> */}
+            <Col><h3 style={{backgroundColor: 'red', color:'white', textAlign:'center'}}>ALERT! {latestAlertData.Crm_Cd_Desc} at {latestAlertData.Location} !</h3></Col>
         </Row>
         <Row>
             <div className="App">
@@ -207,12 +208,12 @@ const styles = {
   },
   label: {
     marginBottom: '5px',
-    color: '#bbb', // Lighter color for labels
+    color: 'black', // Lighter color for labels
   },
   number: {
     padding: '8px',
     borderRadius: '3px',
-    backgroundColor: '#555', // Darker background for numbers
+    backgroundColor: '#198754', // Darker background for numbers
     color: 'white',
     textAlign: 'center',
   },

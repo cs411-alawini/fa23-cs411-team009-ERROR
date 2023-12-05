@@ -18,7 +18,7 @@ app.use(express.json());
 
 // DONE: Get CrimeReports
 app.get("/api/get", (request, response) => {
-    const sqlSelect = "SELECT * FROM CrimeReports NATURAL JOIN AreaMapping NATURAL JOIN WeaponsUsed NATURAL JOIN PremisCodes NATURAL JOIN CrimeStatus NATURAL JOIN CrimeCodes limit 10";
+    const sqlSelect = "SELECT * FROM CrimeReports NATURAL JOIN AreaMapping NATURAL JOIN WeaponsUsed NATURAL JOIN PremisCodes NATURAL JOIN CrimeStatus NATURAL JOIN CrimeCodes ORDER BY DR_NO DESC limit 10";
     db.query(sqlSelect, function (err, result, fields) {
         response.send(result);
         if (err) throw err;
@@ -27,7 +27,7 @@ app.get("/api/get", (request, response) => {
 
 // DONE: Get latest CrimeReport
 app.get("/api/getlatest", (request, response) => {
-  const sqlSelect = "SELECT * FROM CrimeReports NATURAL JOIN AreaMapping NATURAL JOIN WeaponsUsed NATURAL JOIN PremisCodes NATURAL JOIN CrimeStatus NATURAL JOIN CrimeCodes ORDER BY Date_Occ DESC LIMIT 1";
+  const sqlSelect = "SELECT * FROM CrimeReports NATURAL JOIN AreaMapping NATURAL JOIN WeaponsUsed NATURAL JOIN PremisCodes NATURAL JOIN CrimeStatus NATURAL JOIN CrimeCodes ORDER BY DR_NO DESC LIMIT 1";
   db.query(sqlSelect, function (err, result, fields) {
       response.send(result);
       if (err) throw err;
