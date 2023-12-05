@@ -20,9 +20,9 @@ function Navbar() {
           <Link to='#' className='menu-bars'>
             <FaIcons.FaBars onClick={showSidebar} />
           </Link>
-          <ul className="navbar-nav" style={{ display: 'flex', flexDirection: 'row', 'margin-left': 'auto' }}>
+          <ul className="navbar-nav" style={{ display: 'flex', flexDirection: 'row', 'margin-left': 'auto', justifyContent: 'space-between', gap: '10px'}}>
             <li className="nav-item">
-              <a className="nav-link" href="#"><FaBell /></a>
+              <a className="nav-link" href="/alerts"><FaBell /></a>
             </li>
             <li className="nav-item">
               <a className="nav-link" href="/login"><FaSignInAlt /> Sign In</a>

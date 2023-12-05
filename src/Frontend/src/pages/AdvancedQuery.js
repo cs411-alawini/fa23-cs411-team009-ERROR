@@ -55,7 +55,7 @@ const PoliceReports = () => {
     }
   };
 
-  const handleVerify = async (reportId) => {
+  const handleVerify = async (reportId, area_val, premis_val, date_occ_val) => {
     try {
       const response = await fetch(`http://localhost:3002/api/update/verify-report/${reportId}`, {
         method: 'PUT',
@@ -66,10 +66,26 @@ const PoliceReports = () => {
       } else {
         alert('Crime Verified!');
       }
-      fetchCrimeReports();
+      // fetchCrimeReports();
     } catch (error) {
       console.error('Error verifying report:', error);
     }
+
+    try {
+      const response = await fetch(`http://localhost:3002/api/update/autoverify-report/${reportId}?area_val=${area_val}&premis_val=${premis_val}&date_occ_val=${date_occ_val}`, {
+        method: 'PUT',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to auto verify reports');
+      } else {
+        alert('Auto Verified Similar Crimes!');
+      }
+      fetchCrimeReports();
+    } catch (error) {
+      console.error('Error auto - verifying reports:', error);
+    }
+
   };
 
   const handleDelete = async (reportId) => {
@@ -129,7 +145,6 @@ const PoliceReports = () => {
             <th>Date_Occ</th>
             <th>Time_Occ</th>
             <th>Area</th>
-            <th>Rpt_Dist_No</th>
             <th>CrmCd</th>
             <th>Vict_Age</th>
             <th>Vict_Sex</th>
@@ -138,6 +153,7 @@ const PoliceReports = () => {
             <th>Status</th>
             <th>Location</th>
             <th>Reported_By</th>
+            <th>crimeRpt_Priority</th>
             <th>Verify</th>
             <th>Delete</th>
           </tr>
@@ -150,7 +166,6 @@ const PoliceReports = () => {
             <td>{report.Date_Occ}</td>
             <td>{report.Time_Occ}</td>
             <td>{report.Area}</td>
-            <td>{report.Rpt_Dist_No}</td>
             <td>{report.CrmCd}</td>
             <td>{report.Vict_Age}</td>
             <td>{report.Vict_Sex}</td>
@@ -159,8 +174,9 @@ const PoliceReports = () => {
             <td>{report.Status}</td>
             <td>{report.Location}</td>
             <td>{report.Reported_By}</td>
+            <td>{report.crimeRpt_Priority}</td>
             <td>
-                <button onClick={() => handleVerify(report.DR_NO)}>Verify</button>
+                <button onClick={() => handleVerify(report.DR_NO, report.Area, report.Premis_Cd,report.Date_Occ)}>Verify</button>
               </td>
               <td>
                 <button onClick={() => handleDelete(report.DR_NO)}>Delete</button>

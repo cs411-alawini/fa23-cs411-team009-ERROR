@@ -25,6 +25,15 @@ app.get("/api/get", (request, response) => {
     });
 });
 
+// DONE: Get latest CrimeReport
+app.get("/api/getlatest", (request, response) => {
+  const sqlSelect = "SELECT * FROM CrimeReports NATURAL JOIN AreaMapping NATURAL JOIN WeaponsUsed NATURAL JOIN PremisCodes NATURAL JOIN CrimeStatus NATURAL JOIN CrimeCodes ORDER BY Date_Occ DESC LIMIT 1";
+  db.query(sqlSelect, function (err, result, fields) {
+      response.send(result);
+      if (err) throw err;
+  });
+});
+
 // DONE: Get CrimeCount line graph data
 app.get("/api/get/linegraphdata", (require, response) => {
     const sqlSelect = "SELECT CONCAT(month,' ',year) as monthyear, crimecount from (SELECT MONTH(Date_Occ) as month ,DATE_FORMAT(Date_Occ,'%Y') as year, COUNT(*) AS crimecount FROM CrimeReports GROUP BY DATE_FORMAT(Date_Occ,'%Y'), MONTH(Date_Occ) ORDER BY DATE_FORMAT(Date_Occ,'%Y'), MONTH(Date_Occ)) as temp;";
@@ -46,7 +55,7 @@ app.get("/api/get/maxdrno", (require, response) => {
 });
 
 
-// TODO: Insert/Update a player's information
+// TODO: Insert Crime Report 
 app.post("/api/insert/crime/:maxDRNO", (require, response) => {
     // Get present day's date in a suitable format for Date_Rptd
     const currentDate = new Date();
@@ -69,6 +78,7 @@ app.post("/api/insert/crime/:maxDRNO", (require, response) => {
     var Status = '';
     var Rpt_Dist_No = '';
     var Verified = '';
+    var crimeRpt_Priority = '';
     if (DR_NO == '') throw err;
     if (Date_Occ == '') throw err;
     if (Time_Occ == '') throw err;
@@ -86,9 +96,10 @@ app.post("/api/insert/crime/:maxDRNO", (require, response) => {
     if (Status == '') Status = "IC";
     if (Rpt_Dist_No == '') Rpt_Dist_No = 1;
     if (Verified == '') Verified = "Not_verified";
+    if (crimeRpt_Priority == '') crimeRpt_Priority = "NULL";
 
-    var s = "INSERT INTO CrimeReports VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? )";
-    db.query(s, [DR_NO, Date_Rptd, Date_Occ, Time_Occ, Area, Rpt_Dist_No,CrmCd, Vict_Age, Vict_Sex, Vict_Descent, Premis_Cd, Weapon_Used_Cd, Status, Location, Latitude,Longitude,Verified,Reported_By], function (err, result) {
+    var s = "INSERT INTO CrimeReports VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? )";
+    db.query(s, [DR_NO, Date_Rptd, Date_Occ, Time_Occ, Area, Rpt_Dist_No,CrmCd, Vict_Age, Vict_Sex, Vict_Descent, Premis_Cd, Weapon_Used_Cd, Status, Location, Latitude,Longitude,Verified,Reported_By,crimeRpt_Priority], function (err, result) {
         if (err) {
             console.error(err);
             response.status(500).send("Error inserting data into the database");
@@ -150,6 +161,17 @@ app.get("/api/get/crimetypes", (require, response) => {
     });
   });
 
+  // Crime Locations
+app.get("/api/get/crimelocations", (require, response) => {
+    const sqlSelect =
+      "SELECT Latitude, Longitude FROM CrimeReports ORDER BY Date_Occ DESC LIMIT 500;";
+    db.query(sqlSelect, function (err, result, fields) {
+      console.log(result);
+      response.send(result);
+      if (err) throw err;
+    });
+  });
+
 // DONE: Get Un_verified crimereports
 app.get("/api/get/unverified", (require, response) => {
     const sqlSelect = "SELECT * FROM CrimeReports WHERE Verified = 'Not_Verified';";
@@ -168,6 +190,22 @@ app.put("/api/update/verify-report/:field", (require, response) => {
         if (err) {
             console.error(err);
             response.status(500).send("Error verifying crime report!");
+        } 
+        else {
+            response.status(200).send("successfull");
+        }
+    });
+});
+
+// DONE: Auto -Verify Un_verified crimereports
+app.put("/api/update/autoverify-report/:reportId", (req, response) => {
+    const { reportId } = req.params;
+    const { area_val, premis_val, date_occ_val } = req.query;
+    const storedProcedure = 'CALL AutoVerify(?, ?, ?, ?)';
+    db.query(storedProcedure, [parseInt(reportId),parseInt(area_val),parseInt(premis_val),date_occ_val.substring(0,10)], function (err, result) {
+        if (err) {
+            console.error(err);
+            response.status(500).send("Error auto - verifying crime report!");
         } 
         else {
             response.status(200).send("successfull");

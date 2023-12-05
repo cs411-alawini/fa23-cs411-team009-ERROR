@@ -5,7 +5,7 @@ import * as IoIcons from 'react-icons/io';
 
 export const SidebarData = [
   {
-    title: 'Players',
+    title: 'Dashboard',
     path: '/',
     icon: <AiIcons.AiFillHome />,
     cName: 'nav-text'
@@ -13,43 +13,31 @@ export const SidebarData = [
   {
     title: 'Search',
     path: '/search',
-    icon: <IoIcons.IoMdPeople />,
+    icon: <IoIcons.IoIosSearch />,
     cName: 'nav-text'
   },
   {
-    title: 'Tournament',
-    path: '/Tournament',
-    icon: <FaIcons.FaClipboardList />,
-    cName: 'nav-text'
-  },
-  {
-    title: 'Investigator',
-    path: '/Investigator',
-    icon: <FaIcons.FaUserSecret />,
+    title: 'Map',
+    path: '/Map',
+    icon: <FaIcons.FaMapMarked />,
     cName: 'nav-text'
   },
   {
     title: 'ReportCrime',
     path: '/ReportCrime',
-    icon: <FaIcons.FaClinicMedical />,
+    icon: <FaIcons.FaClipboardList />,
     cName: 'nav-text'
   },
   {
-    title: 'Stadium',
+    title: 'ML Prediction',
     path: '/Stadium',
-    icon: <FaIcons.FaCity />,
+    icon: <FaIcons.FaPercent />,
     cName: 'nav-text'
   },
   {
-    title: 'Customized_Players',
-    path: '/Customized_players',
-    icon: <IoIcons.IoIosHappy />,
-    cName: 'nav-text'
-  },
-  {
-    title: 'Advanced_Query',
+    title: 'Verify Crime',
     path: '/Advanced_Query',
-    icon: <IoIcons.IoIosSearch />,
+    icon: <FaIcons.FaCheck />,
     cName: 'nav-text'
   }
 ];

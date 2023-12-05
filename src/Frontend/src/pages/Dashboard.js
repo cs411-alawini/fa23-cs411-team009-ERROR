@@ -19,6 +19,10 @@ function App() {
   const [lineGraphData, setLineGraphData] = useState(null);
   const [genderCountData, setGenderCountData] = useState([]);
   const [weaponCountData, setWeaponCountData] = useState([]);
+  const [latestAlertData, setLatestAlertData] = useState({
+    Location: 'S Busey Avenue',
+    Crm_Cd_Desc: 'Robbery'
+  });
 
   useEffect(() => {
     Axios.get(`http://localhost:3002/api/get/crimetypes`)
@@ -41,6 +45,18 @@ function App() {
           console.error("Error fetching gender count:", error);
         });
     }, []);
+
+    useEffect(() => {
+      Axios.get(`http://localhost:3002/api/getlatest`)
+        .then((response) => {
+          setLatestAlertData(response.data);
+          console.log("Latest Alert : " ,latestAlertData);
+        })
+        .catch((error) => {
+          console.error("Error fetching latest alert:", error);
+        });
+    }, []);
+
 
   useEffect(() => {
     Axios.get(`http://localhost:3002/api/get/linegraphdata`)
@@ -106,13 +122,13 @@ function App() {
 
   return (
       <Container fluid>
-        <Row>
+        <Row >
             <Col md="5"></Col>
-            <Col md="2"><h1>CRIMESTATS</h1></Col>
+            <Col md="2" ><h1 style={{ marginRight: '10px', marginBlock : 'revert'}}>CRIMESTATS</h1></Col>
             <Col md="5"></Col>
         </Row>
         <Row>
-            <Col><h3>Alert! Robbery attempted at S Busey Avenue</h3></Col>
+            {/* <Col><h3 style={{backgroundColor: 'red', color:'white'}}>ALERT! {latestAlertData.Crm_Cd_Desc} at {latestAlertData.Location} !</h3></Col> */}
         </Row>
         <Row>
             <div className="App">
@@ -121,7 +137,7 @@ function App() {
         <Row>
           <Col md="3">
                 <div>
-                <h2 style={styles.heading}>Victims Gender Count</h2>
+                <h2 style={styles.heading}>VICTIMS GENDER DISTRIBUTION!</h2>
                     {genderCountData.map((genderData) => (
                       <div key={genderData.Gender} style={styles.numberContainer}>
                         <p style={styles.label}>{genderData.Gender === 'M' ? 'Male' : 'Female'}:</p>
@@ -146,7 +162,7 @@ function App() {
                 </div>
             </Col>    
             <Col md="4">
-                <Card.Title as="h4">PIE CHART PLACEHOLDER</Card.Title>
+                <Card.Title as="h4">WEAPONS DISTRIBUTION</Card.Title>
                 <p className="card-category">Weapons commonly used!</p>
                 <div className="ct-chart" id="chartHours">
                   <PieChart width={3000} height={3000}>
