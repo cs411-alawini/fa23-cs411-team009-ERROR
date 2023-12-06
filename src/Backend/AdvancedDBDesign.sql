@@ -16,16 +16,6 @@ END;
 DELIMITER ;
 
 
-	DECLARE area_val VARCHAR(50);
-    DECLARE premis_val VARCHAR(50);
-    DECLARE date_occ_val DATE;
-
-    DECLARE cur CURSOR FOR SELECT DR_NO FROM CrimeReports WHERE AreaName = area_val AND Premis_Desc = premis_val AND Date_Occ = date_occ_val AND DR_NO != DRNO;
-	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
-
-
-
-
 
 -- create Stored Procedure for Auto Verifying Duplicate crimes
 DELIMITER //
