@@ -64,7 +64,7 @@ const styles = {
   },
   plotImage: {
     width: '100%',
-    maxWidth: '600px',
+    maxWidth: '800px',
     marginBottom: '20px',
   },
   numbersContainer: {

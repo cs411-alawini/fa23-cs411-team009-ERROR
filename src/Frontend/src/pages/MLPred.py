@@ -159,7 +159,7 @@ with open('src\pages\mlpreds.json', 'w') as f:
 
 # plt.scatter(dates[-30:], crime_counts[-30:], color='black') 
 # plt.scatter(x_future,  predicted, color='blue') 
-plt.figure(figsize=(8,6))
+plt.figure(figsize=(10,8))
 plt.scatter(np.arange(-29,1,1), crime_counts[-30:], color='green') 
 plt.scatter(np.arange(1,4,1),  predicted, color='blue')   
 plt.title('Crime Count Prediction')
