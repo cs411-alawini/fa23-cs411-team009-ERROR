@@ -7,7 +7,7 @@ import '../App.css';
 export default function SignUpPage() {
   const [formData, setFormData] = useState({
     username: '',
-    accessControl: '',
+    accessControl: 'Citizen',
     password: '',
     address: '',
     phone: '',
@@ -54,10 +54,6 @@ export default function SignUpPage() {
         <p>
           <label>Username</label><br/>
           <input type="text" name="username" value={formData.username} onChange={handleInputChange} required />
-        </p>
-        <p>
-          <label>Access Control</label><br/>
-          <input type="text" name="accessControl" value={formData.accessControl} onChange={handleInputChange} required />
         </p>
         <p>
           <label>Password</label><br/>
