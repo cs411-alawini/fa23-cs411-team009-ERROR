@@ -42,7 +42,8 @@ function App() {
       Latitude: row.Latitude,
       Longitude: row.Longitude,
       Verified: row.Verified,
-      Reported_by : row.Reported_by
+      Reported_by : row.Reported_by,
+      crimeRpt_Priority : row.crimeRpt_Priority
     };
   });
 
@@ -60,7 +61,7 @@ function App() {
         columns={[
           { field: 'Date_Rptd', headerName: 'Date_Rptd', flex: 1 },
           { field: 'Date_Occ', headerName: 'Date_Occ', flex: 1 },
-          { field: 'Time_Occ', headerName: 'Time_Occ', flex: 1 },
+          // { field: 'Time_Occ', headerName: 'Time_Occ', flex: 1 },
           { field: 'AreaName', headerName: 'AreaName', flex: 1 },
           { field: 'Vict_Age', headerName: 'Vict_Age', flex: 1 },
           { field: 'Vict_Sex', headerName: 'Vict_Sex', flex: 1 },
@@ -69,6 +70,8 @@ function App() {
           { field: 'Crm_Cd_Desc', headerName: 'Crm_Cd_Desc', flex: 1 },
           { field: 'Status', headerName: 'Status', flex: 1 },
           { field: 'Location', headerName: 'Location', flex: 1 },
+          { field: 'Verified', headerName: 'Verified', flex: 1 },
+          { field: 'crimeRpt_Priority', headerName: 'crimeRpt_Priority', flex: 1 },
           // ... add other columns based on your data model
         ]}
         initialState={{

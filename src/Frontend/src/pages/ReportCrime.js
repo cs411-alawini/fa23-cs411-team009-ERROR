@@ -81,8 +81,23 @@ function MyForm() {
       // });
       // Display success message on the webpage
       alert("Crime Reporting " + data);
+      Axios.get(`http://localhost:3002/api/get/maxdrno`)
+      .then((res) => {
+        console.log(res.data)
+        if(res.data.length>0){
+            console.log(res.data[0].maxDRNO)
+            setMaxDRNO(res.data[0].maxDRNO + 1)
+        }
+        else{
+            console.log('No Data Found!')
+        }
+        
+      })
+      .catch((err)=>{
+        console.log(err.message)
+      })
       // Reload the page after displaying the message
-      window.location.reload();
+      // window.location.reload();
     })
     .catch(error => {
       console.error('There was an error!', error);
