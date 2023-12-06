@@ -270,11 +270,12 @@ app.post('/api/police_login', (req, response) => {
     db.query(sqlCheckExistence, [username, email], (checkErr, result) => {
       if (checkErr) {
         console.error('Error checking existence:', checkErr);
-        return res.status(500).json({ message: 'Internal Server Error' });
+        res.json({ message: 'Internal Server Error' });
       }
   
       if (result.length > 0) {
-        return res.status(409).json({ message: 'Username or email already exists' });
+        res.json({ message: 'Username or email already exists' });
+        return
       }
   
       // Insert the new user
@@ -297,7 +298,7 @@ app.post('/api/police_login', (req, response) => {
         console.log(sqlInsert);
         if (insertErr) {
           console.error('Error inserting user:', insertErr);
-          return res.status(500).json({ message: 'Internal Server Error' });
+          res.json({ message: 'Registration Failed: User already Exists' });
         }
   
         res.json({ message: 'User registered successfully' });

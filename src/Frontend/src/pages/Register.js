@@ -39,7 +39,7 @@ export default function SignUpPage() {
         console.log('Registration successful');
       } else {
         // Handle error (e.g., display an error message)
-        alert("Registration failed:")
+        alert(response.data.message)
         console.error('Registration failed:', response.data.message);
       }
     } catch (error) {
