@@ -12,6 +12,7 @@ import Map from './pages/Map';
 import Login from './pages/login';
 import Alerts from './pages/Alerts';
 import Register from './pages/Register';
+import MLPrediciton from './pages/MLPrediction';
 import Dashboard from './pages/Dashboard';
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
           <Route path='/Map' element={<Map/>} />
           <Route path='/ReportCrime' element={<MCProvider/>} />
           <Route path='/Advanced_Query' element={<AdvancedQuery/>} />
+          <Route path='/MLPrediction' element={<MLPrediciton/>} />
         </Routes>
       </Router>
     </>

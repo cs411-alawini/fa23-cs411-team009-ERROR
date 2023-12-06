@@ -30,7 +30,7 @@ export const SidebarData = [
   },
   {
     title: 'ML Prediction',
-    path: '/Stadium',
+    path: '/MLPrediction',
     icon: <FaIcons.FaPercent />,
     cName: 'nav-text'
   },
